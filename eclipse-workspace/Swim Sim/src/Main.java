@@ -92,61 +92,7 @@ public class Main {
 	
 	public static void placeFishInTank(char[][] tank, int xPos, int yPos)
 	{
-		int count = 1;
-		tank[xPos][yPos] = '>';
-		try
-		{
-			tank[yPos][xPos-count] = '\'';
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
-			tank[yPos][tank.length-count] = '\'';
-		}
-		count++;
-		try
-		{
-			tank[yPos][xPos-count] = '(';
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
-			tank[yPos][tank.length-count] = '(';
-		}
-		count++;
-		try
-		{
-			tank[yPos][xPos-count] = '(';
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
-			tank[yPos][tank.length-count] = '(';
-		}
-		count++;
-		try
-		{
-			tank[yPos][tank.length-count] = '(';
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
-			tank[yPos][tank.length-count] = '(';
-		}
-		count++;
-		try
-		{
-			tank[yPos][tank.length-count] = '<';
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
-			tank[yPos][tank.length-count] = '<';
-		}
-		count++;
-		try
-		{
-			tank[yPos][xPos-count] = '>';
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
-			tank[yPos][tank.length-count] = '>';
-		}
+		
 	}
 }
 
