@@ -67,6 +67,8 @@ public class Main {
 			System.out.println();
 		}
 	}
+	
+	//Needs to have feature added to prevent multiple positions with same Y Coordinate
 	public static int[][] generateRandomPositions(int number, int width, int height)
 	{
 		int[][] randomPositions = new int[number][2];
@@ -77,6 +79,7 @@ public class Main {
 				if(col == 0) {
 					randomPositions[row][col] = Utility.randomInt(width);
 					
+					
 				}
 				else if(col > 0)
 				{
@@ -84,6 +87,7 @@ public class Main {
 				}
 				
 			}
+			
 		}
 		
 		return randomPositions;
@@ -92,7 +96,19 @@ public class Main {
 	
 	public static void placeFishInTank(char[][] tank, int xPos, int yPos)
 	{
+		int count = 0;
 		
+		tank[yPos][xPos] = '>';
+		count++; //Count of each time a character has been printed
+		
+		if(xPos-count < 0)
+		{
+			tank[yPos][tank[yPos].length] = '\'';
+		}
+		else {
+			tank[yPos][xPos+count] = '\'';
+		}
+		count++;
 	}
 }
 
