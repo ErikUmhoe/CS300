@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class Main {
 
 	public static void main(String[] args) {
-		int height = 4, width = 32;
+		int height = 8, width = 32;
 		char[][] tank = new char[height][width];
 		fillTank(tank,'~');
 		
@@ -13,15 +13,27 @@ public class Main {
 		System.out.println();
 		System.out.println("Random Positions:");
 		
-		int[][] posB = generateRandomPositions(3,width,height);
+		int[][] posF = generateRandomPositions(4,width,height);
 		
-		System.out.println(Arrays.deepToString(posB));
-		for(int row = 0; row < posB.length; row++)
+		System.out.println(Arrays.deepToString(posF));
+		for(int row = 0; row < posF.length; row++)
 		{
-			placeFishInTank(tank, posB[row][0], posB[row][1]);
+			placeFishInTank(tank, posF[row][0], posF[row][1]);
 		}
 		
 		renderTank(tank);
+		
+		for(int x = 0; x < 100; x++)
+		{
+			Utility.pause(200);
+			System.out.println("\n\n\n");
+			posF=moveAllFish(posF, width, height);
+			for(int row = 0; row < posF.length; row++)
+			{
+				placeFishInTank(tank, posF[row][0], posF[row][1]);
+			}
+			renderTank(tank);
+		}
 		
 		
 	}
@@ -95,19 +107,28 @@ public class Main {
 	
 	public static void placeFishInTank(char[][] tank, int xPos, int yPos)
 	{
-		int count = 0;
-		
 		tank[yPos][xPos] = '>';
-		count++; //Count of each time a character has been printed
+		String fish = "'((<>";
+		int fishChar = 0;
 		
-		if(xPos-count < 0)
+		for(int xCord = xPos + 1; xCord < tank[yPos].length && fishChar < fish.length(); xCord++)
 		{
-			tank[yPos][tank[yPos].length] = '\'';
+			tank[yPos][xCord] = fish.charAt(fishChar);
+			fishChar++;
 		}
-		else {
-			tank[yPos][xPos+count] = '\'';
+		if(xPos>(tank[yPos].length-(fish.length()+2)))
+		{
+			tank[yPos][fish.length()-fishChar]='~';
 		}
-		count++;
+		else
+		{
+			tank[yPos][xPos+fish.length()+1]='~';
+		}
+		for(int xCord = 0;fishChar < fish.length(); xCord++)
+		{
+			tank[yPos][xCord] = fish.charAt(fishChar);
+			fishChar++;
+		}
 	}
 	
 	public static int[][] duplicateCheck(int[][] positions, int height)
@@ -118,9 +139,7 @@ public class Main {
 			{
 				if(positions[row][1] == positions[prevRow][1])
 				{
-					System.out.println("Old Num Row "+row+" "+positions[row][1]);
 					positions[row][1] = Utility.randomInt(height);
-					System.out.println("New Num Row "+row+" "+positions[row][1]+"\n");
 					duplicateCheck(positions, height);
 				}
 			}
@@ -128,4 +147,19 @@ public class Main {
 		return positions;
 	}
 	
+	public static int[][] moveAllFish(int[][] positions, int width, int height)
+	{
+		for(int row = 0; row < positions.length; row++)
+		{
+			if(positions[row][0]>0)
+			{
+				positions[row][0]--;
+			}
+			else
+			{
+				positions[row][0] = width-1;
+			}
+		}
+		return positions;
+	}
 }
