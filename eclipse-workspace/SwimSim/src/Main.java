@@ -37,8 +37,8 @@ public class Main {
 			Utility.pause(200);
 			System.out.println("\n\n\n");
 			//Puts objects in first. For dx, negative value moves it right, positive left. For dy, negative value moves down, positive up
-			posFish = moveAllObjects(posFish, width, height,-1,0);
-			posFood = moveAllObjects(posFood, width, height, 1,-1);
+			posFish = moveAllObjects(posFish, width, height,1,0);
+			posFood = moveAllObjects(posFood, width, height, -1,-1);
 			posHook = moveAllObjects(posHook, width,height,0,1);
 			
 			fillTank(tank, '~'); //'Resets' tank to not cause any left over
@@ -93,9 +93,9 @@ public class Main {
 	 */
 	public static void renderTank(char[][] tank)
 	{
-		for(int row = tank.length-1; row >= 0; row--)
+		for(int row = 0; row < tank.length; row++)
 		{
-			for(int col = tank[row].length-1; col >= 0; col--)
+			for(int col = 0; col < tank[row].length-1; col++)
 			{
 				System.out.print(tank[row][col]);
 			}
@@ -131,26 +131,25 @@ public class Main {
 	
 	public static void placeObjectInTank(String object, char[][] tank, int xPos, int yPos)
 	{
-		String reversed = "";
-		for(int i = object.length()-1; i >= 0; i--)
+		
+		tank[yPos][xPos] = object.charAt(object.length()-1);
+		if(object.length() > 1)
 		{
-			reversed += object.charAt(i);
-		}
-		tank[yPos][xPos] = reversed.charAt(0);
-		if(reversed.length() > 1)
-		{
-			String remain = reversed.substring(1);
+			String remain = object.substring(1);
 			int count = 0;
-			for(int xCord = xPos + 1; xCord < tank[yPos].length && count < remain.length(); xCord++)
+			for(int xCord = xPos; xCord >= 0 && count < remain.length(); xCord--)
 			{
-				tank[yPos][xCord] = remain.charAt(count);
+				tank[yPos][xCord] = remain.charAt(remain.length()-(count+1));
 				count++;
 			}
+			
+			/*
 			for(int xCord = 0;count < remain.length(); xCord++)
 			{
 				tank[yPos][xCord] = remain.charAt(count);
 				count++;
 			}
+			*/
 		}
 		
 		
