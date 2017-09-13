@@ -31,15 +31,17 @@ public class Main {
 			placeObjectInTank("J",tank, posHook[row][0], posHook[row][1]);
 		}
 		renderTank(tank);
-		
-		for(int x = 0; x < 100; x++)
+		//Method that moves fish forever
+		for(int x = 0; x < Integer.MAX_VALUE; x++)
 		{
 			Utility.pause(200);
 			System.out.println("\n\n\n");
+			//Puts objects in first. For dx, negative value moves it right, positive left. For dy, negative value moves down, positive up
 			posFish = moveAllObjects(posFish, width, height,-1,0);
 			posFood = moveAllObjects(posFood, width, height, 1,-1);
 			posHook = moveAllObjects(posHook, width,height,0,1);
-			fillTank(tank, '~');
+			
+			fillTank(tank, '~'); //'Resets' tank to not cause any left over
 			for(int row = 0; row < posFish.length; row++)
 			{
 				placeObjectInTank("><(('>",tank, posFish[row][0], posFish[row][1]);
@@ -53,6 +55,7 @@ public class Main {
 				placeObjectInTank("J",tank, posHook[row][0], posHook[row][1]);
 			}
 			renderTank(tank);
+			x--;
 		}
 		
 		
@@ -119,6 +122,7 @@ public class Main {
 			}
 			
 		}
+		//Uses recursive method to ensure that no duplicate positions
 		int[][] positions = duplicateCheck(randomPositions, height);
 		
 		return positions;
@@ -152,20 +156,10 @@ public class Main {
 		
 		
 		
-		//Add water behind fish
-		/*
-		if(xPos>(tank[yPos].length-(fish.length()+2)))
-		{
-			tank[yPos][fish.length()-fishChar]='~';
-		}
-		else
-		{
-			tank[yPos][xPos+fish.length()+1]='~';
-		}
-		*/
+	
 		
 	}
-	
+	//Beautiful Recursive method to check if any duplicate positions are in place
 	public static int[][] duplicateCheck(int[][] positions, int height)
 	{
 		for(int row = positions.length-1; row > 0; row--)
@@ -186,7 +180,7 @@ public class Main {
 	{
 		for(int row = 0; row < positions.length; row++)
 		{
-			if(dx < 0)
+			if(dx < 0) //Needed to ensure proper wrapping and no out of bounds exceptions
 			{
 				if(positions[row][0] > 0)
 				{
@@ -208,14 +202,7 @@ public class Main {
 					positions[row][0] = 0;
 				}
 			}
-			/*if(positions[row][0]>0)
-			{
-				positions[row][0]-=dx;
-			}
-			else
-			{
-				positions[row][0] = width-1;
-			}*/
+			
 			if(dy < 0)
 			{
 				if(positions[row][1] > 0)
