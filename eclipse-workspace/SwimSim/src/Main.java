@@ -13,24 +13,44 @@ public class Main {
 		System.out.println();
 		System.out.println("Random Positions:");
 		
-		int[][] posF = generateRandomPositions(4,width,height);
+		int[][] posFish = generateRandomPositions(4,width,height);
+		int[][] posFood = generateRandomPositions(6,width,height);
+		int[][] posHook = generateRandomPositions(1,width,height);
 		
-		System.out.println(Arrays.deepToString(posF));
-		for(int row = 0; row < posF.length; row++)
+		System.out.println(Arrays.deepToString(posFish));
+		for(int row = 0; row < posFish.length; row++)
 		{
-			placeFishInTank(tank, posF[row][0], posF[row][1]);
+			placeObjectInTank("><(('>",tank, posFish[row][0], posFish[row][1]);
 		}
-		
+		for(int row = 0; row < posFood.length; row++)
+		{
+			placeObjectInTank("*",tank, posFood[row][0], posFood[row][1]);
+		}
+		for(int row = 0; row < posHook.length; row++)
+		{
+			placeObjectInTank("J",tank, posHook[row][0], posHook[row][1]);
+		}
 		renderTank(tank);
 		
 		for(int x = 0; x < 100; x++)
 		{
 			Utility.pause(200);
 			System.out.println("\n\n\n");
-			posF=moveAllFish(posF, width, height);
-			for(int row = 0; row < posF.length; row++)
+			posFish = moveAllObjects(posFish, width, height,-1,0);
+			posFood = moveAllObjects(posFood, width, height, 1,-1);
+			posHook = moveAllObjects(posHook, width,height,0,1);
+			fillTank(tank, '~');
+			for(int row = 0; row < posFish.length; row++)
 			{
-				placeFishInTank(tank, posF[row][0], posF[row][1]);
+				placeObjectInTank("><(('>",tank, posFish[row][0], posFish[row][1]);
+			}
+			for(int row = 0; row < posFood.length; row++)
+			{
+				placeObjectInTank("*",tank, posFood[row][0], posFood[row][1]);
+			}
+			for(int row = 0; row < posHook.length; row++)
+			{
+				placeObjectInTank("J",tank, posHook[row][0], posHook[row][1]);
 			}
 			renderTank(tank);
 		}
@@ -105,17 +125,35 @@ public class Main {
 		
 	}
 	
-	public static void placeFishInTank(char[][] tank, int xPos, int yPos)
+	public static void placeObjectInTank(String object, char[][] tank, int xPos, int yPos)
 	{
-		tank[yPos][xPos] = '>';
-		String fish = "'((<>";
-		int fishChar = 0;
-		
-		for(int xCord = xPos + 1; xCord < tank[yPos].length && fishChar < fish.length(); xCord++)
+		String reversed = "";
+		for(int i = object.length()-1; i >= 0; i--)
 		{
-			tank[yPos][xCord] = fish.charAt(fishChar);
-			fishChar++;
+			reversed += object.charAt(i);
 		}
+		tank[yPos][xPos] = reversed.charAt(0);
+		if(reversed.length() > 1)
+		{
+			String remain = reversed.substring(1);
+			int count = 0;
+			for(int xCord = xPos + 1; xCord < tank[yPos].length && count < remain.length(); xCord++)
+			{
+				tank[yPos][xCord] = remain.charAt(count);
+				count++;
+			}
+			for(int xCord = 0;count < remain.length(); xCord++)
+			{
+				tank[yPos][xCord] = remain.charAt(count);
+				count++;
+			}
+		}
+		
+		
+		
+		
+		//Add water behind fish
+		/*
 		if(xPos>(tank[yPos].length-(fish.length()+2)))
 		{
 			tank[yPos][fish.length()-fishChar]='~';
@@ -124,11 +162,8 @@ public class Main {
 		{
 			tank[yPos][xPos+fish.length()+1]='~';
 		}
-		for(int xCord = 0;fishChar < fish.length(); xCord++)
-		{
-			tank[yPos][xCord] = fish.charAt(fishChar);
-			fishChar++;
-		}
+		*/
+		
 	}
 	
 	public static int[][] duplicateCheck(int[][] positions, int height)
@@ -147,17 +182,61 @@ public class Main {
 		return positions;
 	}
 	
-	public static int[][] moveAllFish(int[][] positions, int width, int height)
+	public static int[][] moveAllObjects(int[][] positions, int width, int height, int dx, int dy)
 	{
 		for(int row = 0; row < positions.length; row++)
 		{
-			if(positions[row][0]>0)
+			if(dx < 0)
 			{
-				positions[row][0]--;
+				if(positions[row][0] > 0)
+				{
+					positions[row][0] += dx;
+				}
+				else
+				{
+					positions[row][0] = width - 1;
+				}
+			}
+			else if(dx > 0)
+			{
+				if(positions[row][0] < width-dx)
+				{
+					positions[row][0] += dx;
+				}
+				else
+				{
+					positions[row][0] = 0;
+				}
+			}
+			/*if(positions[row][0]>0)
+			{
+				positions[row][0]-=dx;
 			}
 			else
 			{
 				positions[row][0] = width-1;
+			}*/
+			if(dy < 0)
+			{
+				if(positions[row][1] > 0)
+				{
+					positions[row][1] += dy;
+				}
+				else
+				{
+					positions[row][1] = height - 1;
+				}
+			}
+			else if(dy > 0)
+			{
+				if(positions[row][1] < height-dy)
+				{
+					positions[row][1] += dy;
+				}
+				else
+				{
+					positions[row][1] = 0;
+				}
 			}
 		}
 		return positions;
