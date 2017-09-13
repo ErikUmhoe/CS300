@@ -1,4 +1,3 @@
-
 import java.util.Arrays;
 
 public class Main {
@@ -135,21 +134,20 @@ public class Main {
 		tank[yPos][xPos] = object.charAt(object.length()-1);
 		if(object.length() > 1)
 		{
-			String remain = object.substring(1);
+			String remain = object;
 			int count = 0;
 			for(int xCord = xPos; xCord >= 0 && count < remain.length(); xCord--)
 			{
 				tank[yPos][xCord] = remain.charAt(remain.length()-(count+1));
+				System.out.println("("+xCord+","+yPos+") "+remain.charAt(remain.length()-(count+1)));
 				count++;
 			}
-			
-			/*
-			for(int xCord = 0;count < remain.length(); xCord++)
+			System.out.println();
+			for(int xCord = tank[0].length-1;count < remain.length(); xCord--)
 			{
 				tank[yPos][xCord] = remain.charAt(count);
 				count++;
 			}
-			*/
 		}
 		
 		
