@@ -194,7 +194,11 @@ public class Main {
 					positions[row][0] = 0;
 				}
 			}
+<<<<<<< HEAD
 			if(realDy < 0) //Needed to ensure proper wrapping and no out of bounds exceptions
+=======
+			if(realDy < 0) //Needed to ensure proper wrapping and no out of bounds exceptions.
+>>>>>>> d61e1922f2cf1df16fad1bcc1c7f8abac38f55a5
 			{
 				if(positions[row][1] > 0)
 				{
