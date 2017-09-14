@@ -3,7 +3,8 @@ import java.util.Arrays;
 public class Main {
 
 	public static void main(String[] args) {
-		int height = 10, width = 100;
+		int height = 8, width = 32;
+		int fishNum = 4,foodNum = 6, hookNum = 1;
 		char[][] tank = new char[height][width];
 		fillTank(tank,'~');
 		
@@ -12,9 +13,9 @@ public class Main {
 		System.out.println();
 		System.out.println("Random Positions:");
 		
-		int[][] posFish = generateRandomPositions(4,width,height);
-		int[][] posFood = generateRandomPositions(6,width,height);
-		int[][] posHook = generateRandomPositions(1,width,height);
+		int[][] posFish = generateRandomPositions(fishNum,width,height);
+		int[][] posFood = generateRandomPositions(foodNum,width,height);
+		int[][] posHook = generateRandomPositions(hookNum,width,height);
 		
 		System.out.println(Arrays.deepToString(posFish));
 		for(int row = 0; row < posFish.length; row++)
@@ -35,10 +36,10 @@ public class Main {
 		{
 			Utility.pause(200);
 			System.out.println("\n\n\n");
-			//Puts objects in first. For dx, negative value moves it right, positive left. For dy, negative value moves up, positive down
+			//Puts objects in first. For dx, negative value moves it right, positive left. For dy, negative value moves down, positive up
 			posFish = moveAllObjects(posFish,1,0, width, height);
-			posFood = moveAllObjects(posFood, -1,1, width, height);
-			posHook = moveAllObjects(posHook,0,-1, width,height);
+			posFood = moveAllObjects(posFood,-1,1, width, height);
+			posHook = moveAllObjects(posHook,0,-1, width, height);
 			
 			fillTank(tank, '~'); //'Resets' tank to not cause any left over
 			for(int row = 0; row < posFish.length; row++)
@@ -102,7 +103,7 @@ public class Main {
 		}
 	}
 	
-	
+	//Needs to have feature added to prevent multiple positions with same Y Coordinate
 	public static int[][] generateRandomPositions(int number, int width, int height)
 	{
 		int[][] randomPositions = new int[number][2];
@@ -122,9 +123,9 @@ public class Main {
 			
 		}
 		//Uses recursive method to ensure that no duplicate positions
-		int[][] positions = duplicateCheck(randomPositions, height);
+		//int[][] positions = duplicateCheck(randomPositions, height);
 		
-		return positions;
+		return randomPositions;
 		
 	}
 	
@@ -141,18 +142,12 @@ public class Main {
 				tank[row][xCord] = remain.charAt(remain.length()-(count+1));
 				count++;
 			}
-			
 			for(int xCord = tank[0].length-1;count < remain.length(); xCord--)
 			{
 				tank[row][xCord] = remain.charAt(remain.length()-(count+1));
 				count++;
 			}
 		}
-		
-		
-		
-		
-	
 		
 	}
 	//Beautiful Recursive method to check if any duplicate positions are in place
@@ -172,8 +167,9 @@ public class Main {
 		return positions;
 	}
 	
-	public static int[][] moveAllObjects(int[][] positions, int dx, int dy, int width, int height)
+	public static int[][] moveAllObjects(int[][] positions, int dx, int dy,int width, int height)
 	{
+		int realDy=dy;
 		for(int row = 0; row < positions.length; row++)
 		{
 			if(dx < 0) //Needed to ensure proper wrapping and no out of bounds exceptions
@@ -184,7 +180,7 @@ public class Main {
 				}
 				else
 				{
-					positions[row][0] = width + dx;
+					positions[row][0] = width - 1;
 				}
 			}
 			else if(dx > 0)
@@ -198,32 +194,30 @@ public class Main {
 					positions[row][0] = 0;
 				}
 			}
-			
-			if(dy < 0)
+			if(realDy < 0) //Needed to ensure proper wrapping and no out of bounds exceptions
 			{
 				if(positions[row][1] > 0)
 				{
-					positions[row][1] += dy;
+					positions[row][1] += realDy;
 				}
 				else
 				{
-					positions[row][1] = height + dy;
+					positions[row][1] = height - 1;
 				}
 			}
-			else if(dy > 0)
+			else if(realDy > 0)
 			{
-				if(positions[row][1] < height-dy)
+				if(positions[row][1] < height-realDy)
 				{
-					positions[row][1] += dy;
+					positions[row][1] += realDy;
 				}
 				else
 				{
 					positions[row][1] = 0;
 				}
 			}
+			
 		}
-		
-		
 		return positions;
 	}
 }
