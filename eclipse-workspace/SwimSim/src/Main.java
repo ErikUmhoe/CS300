@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class Main {
 
 	public static void main(String[] args) {
-		int height = 8, width = 32;
+		int height = 10, width = 100;
 		char[][] tank = new char[height][width];
 		fillTank(tank,'~');
 		
@@ -35,10 +35,10 @@ public class Main {
 		{
 			Utility.pause(200);
 			System.out.println("\n\n\n");
-			//Puts objects in first. For dx, negative value moves it right, positive left. For dy, negative value moves down, positive up
-			posFish = moveAllObjects(posFish, width, height,1,0);
-			posFood = moveAllObjects(posFood, width, height, -1,-1);
-			posHook = moveAllObjects(posHook, width,height,0,1);
+			//Puts objects in first. For dx, negative value moves it right, positive left. For dy, negative value moves up, positive down
+			posFish = moveAllObjects(posFish,1,0, width, height);
+			posFood = moveAllObjects(posFood, -1,1, width, height);
+			posHook = moveAllObjects(posHook,0,-1, width,height);
 			
 			fillTank(tank, '~'); //'Resets' tank to not cause any left over
 			for(int row = 0; row < posFish.length; row++)
@@ -94,7 +94,7 @@ public class Main {
 	{
 		for(int row = 0; row < tank.length; row++)
 		{
-			for(int col = 0; col < tank[row].length-1; col++)
+			for(int col = 0; col < tank[row].length; col++)
 			{
 				System.out.print(tank[row][col]);
 			}
@@ -102,7 +102,7 @@ public class Main {
 		}
 	}
 	
-	//Needs to have feature added to prevent multiple positions with same Y Coordinate
+	
 	public static int[][] generateRandomPositions(int number, int width, int height)
 	{
 		int[][] randomPositions = new int[number][2];
@@ -128,24 +128,23 @@ public class Main {
 		
 	}
 	
-	public static void placeObjectInTank(String object, char[][] tank, int xPos, int yPos)
+	public static void placeObjectInTank(String object, char[][] tank, int column, int row)
 	{
 		
-		tank[yPos][xPos] = object.charAt(object.length()-1);
+		tank[row][column] = object.charAt(object.length()-1);
 		if(object.length() > 1)
 		{
 			String remain = object;
 			int count = 0;
-			for(int xCord = xPos; xCord >= 0 && count < remain.length(); xCord--)
+			for(int xCord = column; xCord >= 0 && count < remain.length(); xCord--)
 			{
-				tank[yPos][xCord] = remain.charAt(remain.length()-(count+1));
-				System.out.println("("+xCord+","+yPos+") "+remain.charAt(remain.length()-(count+1)));
+				tank[row][xCord] = remain.charAt(remain.length()-(count+1));
 				count++;
 			}
-			System.out.println();
+			
 			for(int xCord = tank[0].length-1;count < remain.length(); xCord--)
 			{
-				tank[yPos][xCord] = remain.charAt(count);
+				tank[row][xCord] = remain.charAt(remain.length()-(count+1));
 				count++;
 			}
 		}
@@ -173,7 +172,7 @@ public class Main {
 		return positions;
 	}
 	
-	public static int[][] moveAllObjects(int[][] positions, int width, int height, int dx, int dy)
+	public static int[][] moveAllObjects(int[][] positions, int dx, int dy, int width, int height)
 	{
 		for(int row = 0; row < positions.length; row++)
 		{
@@ -185,7 +184,7 @@ public class Main {
 				}
 				else
 				{
-					positions[row][0] = width - 1;
+					positions[row][0] = width + dx;
 				}
 			}
 			else if(dx > 0)
@@ -208,7 +207,7 @@ public class Main {
 				}
 				else
 				{
-					positions[row][1] = height - 1;
+					positions[row][1] = height + dy;
 				}
 			}
 			else if(dy > 0)
@@ -223,6 +222,8 @@ public class Main {
 				}
 			}
 		}
+		
+		
 		return positions;
 	}
 }
