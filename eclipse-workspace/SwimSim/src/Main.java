@@ -194,7 +194,7 @@ public class Main {
 					positions[row][0] = 0;
 				}
 			}
-			if(realDy < 0) //Needed to ensure proper wrapping and no out of bounds exceptions
+			if(realDy < 0) //Needed to ensure proper wrapping and no out of bounds exceptions.
 			{
 				if(positions[row][1] > 0)
 				{
