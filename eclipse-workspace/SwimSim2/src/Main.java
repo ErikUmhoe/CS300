@@ -3,64 +3,77 @@ import java.util.Arrays;
 public class Main {
 
 	public static void main(String[] args) {
-		int height = 8, width = 32;
-		int fishNum = 4,foodNum = 6, hookNum = 1;
-		char[][] tank = new char[height][width];
-		fillTank(tank,'~');
 		
-		renderTank(tank);
-		
-		System.out.println();
-		System.out.println("Random Positions:");
-		
-		int[][] posFish = generateRandomPositions(fishNum,width,height);
-		int[][] posFood = generateRandomPositions(foodNum,width,height);
-		int[][] posHook = generateRandomPositions(hookNum,width,height);
-		
-		System.out.println(Arrays.deepToString(posFish));
-		for(int row = 0; row < posFish.length; row++)
+		/*Data dataMain = new Data();
+		setup(dataMain);
+		while(true)
 		{
-			placeObjectInTank("><(('>",tank, posFish[row][0], posFish[row][1]);
+			update(dataMain);
 		}
-		for(int row = 0; row < posFood.length; row++)
-		{
-			placeObjectInTank("*",tank, posFood[row][0], posFood[row][1]);
-		}
-		for(int row = 0; row < posHook.length; row++)
-		{
-			placeObjectInTank("J",tank, posHook[row][0], posHook[row][1]);
-		}
-		renderTank(tank);
-		//Method that moves fish forever
-		for(int x = 0; x < Integer.MAX_VALUE; x++)
-		{
-			Utility.pause(200);
-			System.out.println("\n\n\n");
-			//Puts objects in first. For dx, negative value moves it right, positive left. For dy, negative value moves down, positive up
-			posFish = moveAllObjects(posFish,1,0, width, height);
-			posFood = moveAllObjects(posFood,-1,1, width, height);
-			posHook = moveAllObjects(posHook,0,-1, width, height);
-			
-			fillTank(tank, '~'); //'Resets' tank to not cause any left over
-			for(int row = 0; row < posFish.length; row++)
-			{
-				placeObjectInTank("><(('>",tank, posFish[row][0], posFish[row][1]);
-			}
-			for(int row = 0; row < posFood.length; row++)
-			{
-				placeObjectInTank("*",tank, posFood[row][0], posFood[row][1]);
-			}
-			for(int row = 0; row < posHook.length; row++)
-			{
-				placeObjectInTank("J",tank, posHook[row][0], posHook[row][1]);
-			}
-			renderTank(tank);
-			x--;
-		}
-		
+		*/
+		Utility.startSimulation();
 		
 	}
 	
+	public static void update(Data data) {
+		for(int x = 0; x < Integer.MAX_VALUE; x++)
+		{
+			//Puts objects in first. For dx, negative value moves it right, positive left. For dy, negative value moves down, positive up
+			data.fishPositions = moveAllObjects(data.fishPositions,1,0, data.tank[0].length, data.tank.length);
+			data.foodPositions = moveAllObjects(data.foodPositions,-1,1, data.tank[0].length, data.tank.length);
+			data.hookPositions = moveAllObjects(data.hookPositions,0,-1, data.tank[0].length, data.tank.length);
+			
+
+			for(int row = 0; row < data.fishPositions.length; row++)
+			{
+				placeObjectInTank("><(('>",data.processing, data.fishPositions[row][0], data.fishPositions[row][1]);
+			}
+			for(int row = 0; row < data.foodPositions.length; row++)
+			{
+				placeObjectInTank("*",data.processing, data.foodPositions[row][0], data.foodPositions[row][1]);
+			}
+			for(int row = 0; row < data.hookPositions.length; row++)
+			{
+				placeObjectInTank("J",data.processing, data.hookPositions[row][0],data.hookPositions[row][1]);
+			}
+			
+		}
+		
+	}
+
+	public static void setup(Data dataMain) {
+		int height = dataMain.processing.displayHeight, width = dataMain.processing.displayWidth;
+		int fishNum = 4,foodNum = 6, hookNum = 1;
+		dataMain.tank = new char[height][width];
+//      fillTank(dataMain.tank,'~');
+		dataMain.processing.background(0,255,255);
+		
+		//renderTank(dataMain.tank);
+		
+		//System.out.println();
+		//System.out.println("Random Positions:");
+		
+		dataMain.fishPositions = generateRandomPositions(fishNum,dataMain.tank[0].length, dataMain.tank.length);
+		dataMain.foodPositions = generateRandomPositions(foodNum,dataMain.tank[0].length, dataMain.tank.length);
+		dataMain.hookPositions = generateRandomPositions(hookNum,dataMain.tank[0].length, dataMain.tank.length);
+		
+		dataMain.processing.background(0,255,255);
+		for(int row = 0; row < dataMain.fishPositions.length; row++)
+		{
+			placeObjectInTank("><(('>",dataMain.processing, dataMain.fishPositions[row][0], dataMain.fishPositions[row][1]);
+		}
+		for(int row = 0; row < dataMain.foodPositions.length; row++)
+		{
+			placeObjectInTank("*",dataMain.processing, dataMain.foodPositions[row][0], dataMain.foodPositions[row][1]);
+		}
+		for(int row = 0; row < dataMain.hookPositions.length; row++)
+		{
+			placeObjectInTank("J",dataMain.processing, dataMain.hookPositions[row][0], dataMain.hookPositions[row][1]);
+		}
+		//renderTank(dataMain.tank);
+		
+	}
+
 	/**
 	 * Copies the water character into every position in the tank array. The two-dimensional tank
 	 * array can have dimensions of any size(s).
@@ -122,48 +135,53 @@ public class Main {
 			}
 			
 		}
-		
-		
 		//Uses recursive method to ensure that no duplicate positions
 		//int[][] positions = duplicateCheck(randomPositions, height);
-		int[][] positions = randomPositions;
-		for(int row = positions.length-1; row > 0; row--)
-		{
-			for(int prevRow = row-1; prevRow >= 0; prevRow--)
-			{
-				if(positions[row][1] == positions[prevRow][1])
-				{
-					positions[row][1] = Utility.randomInt(height);
-					//prevRow = row - 1;
-				}
-			}
-		}
-		return positions;
+		
+		return randomPositions;
 		
 	}
 	
-	public static void placeObjectInTank(String object, char[][] tank, int column, int row)
+	public static void placeObjectInTank(String object, PApplet processing, int column, int row)
 	{
-		
-		tank[row][column] = object.charAt(object.length()-1);
+		PImage img = processing.loadImage("images" + java.io.File.separator + "FISH.png");
+		if(object.equals("><(('>"))
+		{
+			img = processing.loadImage("images" + java.io.File.separator + "FISH.png");
+		}
+		else if(object.equals("*"))
+		{
+			img = processing.loadImage("images" + java.io.File.separator + "FOOD.png");
+		}
+		else if(object.equals("J"))
+		{
+			img = processing.loadImage("images" + java.io.File.separator + "HOOK.png");
+		}
+		processing.fill(0);
+		processing.image(img,column,row);
+		/*
 		if(object.length() > 1)
 		{
+
 			String remain = object;
 			int count = 0;
 			for(int xCord = column; xCord >= 0 && count < remain.length(); xCord--)
 			{
-				tank[row][xCord] = remain.charAt(remain.length()-(count+1));
+//				rocessing.text(remain.charAt(remain.length()-(count+1)),xCord,row);
+				processing.image(img,xCord,row);
 				count++;
 			}
-			for(int xCord = tank[0].length-1;count < remain.length(); xCord--)
+			for(int xCord = column;count < remain.length(); xCord--)
 			{
-				tank[row][xCord] = remain.charAt(remain.length()-(count+1));
+//				processing.text(remain.charAt(remain.length()-(count+1)),xCord,row);
+				processing.image(img,xCord,row);
 				count++;
 			}
 		}
+		*/
 		
 	}
-	/*
+	//Beautiful Recursive method to check if any duplicate positions are in place
 	public static int[][] duplicateCheck(int[][] positions, int height)
 	{
 		for(int row = positions.length-1; row > 0; row--)
@@ -178,7 +196,7 @@ public class Main {
 			}
 		}
 		return positions;
-	}*/
+	}
 	
 	public static int[][] moveAllObjects(int[][] positions, int dx, int dy,int width, int height)
 	{
@@ -207,7 +225,10 @@ public class Main {
 					positions[row][0] = 0;
 				}
 			}
+
+			
 			if(realDy < 0) //Needed to ensure proper wrapping and no out of bounds exceptions.
+
 			{
 				if(positions[row][1] > 0)
 				{
