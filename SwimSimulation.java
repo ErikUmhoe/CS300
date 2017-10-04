@@ -11,19 +11,28 @@ public class SwimSimulation {
 	private Hook hook;
 
 	public static void main(String[] args) {
-		File ssf = new File("FileOptions.ssf");
-		String[] ssdLocations = readSSF(ssf);
-		for(int i = 0; i < ssdLocations.length; i++)
-		{
-			System.out.println(ssdLocations[i]);
-		}
+		
 		
 	}
 
 	public SwimSimulation(PApplet processing) {
 
 		this.processing = processing;
-		int height = processing.height, width = processing.width;
+		File ssf = new File("FileOptions.ssf");
+		String[] ssdLocations = readSSF(ssf);
+		
+		if(ssdLocations[0]==null)
+		{
+			this.loadDefault(processing);
+		}
+		else {
+			for(int i = 0; i < ssdLocations.length; i++)
+			{
+				System.out.println(ssdLocations[i]);
+			}
+		}
+		
+		/*int height = processing.height, width = processing.width;
 		int fishNum = 4, foodNum = 6, hookNum = 1;
 		
 		fishes = new Fish[fishNum];
@@ -35,7 +44,7 @@ public class SwimSimulation {
 		}
 		for (int i = 0; i < foodNum; i++) {
 			foods[i] = new Food(this.processing);
-		}
+		}*/
 
 	}
 
@@ -107,6 +116,22 @@ public class SwimSimulation {
 			
 		}
 		return files;
+		
+	}
+	
+	private void loadDefault(PApplet processing)
+	{
+		fishes = new Fish[4];
+		foods = new Food[6];
+		hook = new Hook(this.processing);
+		for(int i = 0; i < fishes.length; i++)
+		{
+			fishes[i] = new Fish(processing);
+		}
+		for(int i = 0; i < foods.length; i++)
+		{
+			foods[i] = new Food(processing);
+		}	
 		
 	}
 	
