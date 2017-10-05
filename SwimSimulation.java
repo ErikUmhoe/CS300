@@ -5,22 +5,27 @@ import java.util.Scanner;
 
 public class SwimSimulation {
 
+	//Creates the objects that will be instantiated here
 	private PApplet processing;
-	private Fish[] fishes;
-	private Food[] foods;
-	private Hook hook;
+	private Fish[] fishes; 
+	private Food[] foods; 
+	private Hook hook; 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		
 		
 	}
-
-	public SwimSimulation(PApplet processing) {
+	//Method that sets up necessary requirements for the applet to run
+	public SwimSimulation(PApplet processing) 
+	{
 
 		this.processing = processing;
-		File ssf = new File("FileOptions.ssf");
+		File ssf = new File("FileOptions.ssf"); 
+		//Looks for FileOptions.ssf and splits the ssd file locations into strings if the file is found
 		String[] ssdLocations = readSSF(ssf);
 		
+		//If there is an issue with FileOptions.ssf, load the default values for locations
 		if(ssdLocations[0]==null)
 		{
 			this.loadDefault(processing);
@@ -31,40 +36,20 @@ public class SwimSimulation {
 				System.out.println(ssdLocations[i]);
 			}
 		}
+		int randomSSD = Utility.randomInt(ssdLocations.length);
+		System.out.println("Random location: " + ssdLocations[randomSSD]);
 		
-		/*int height = processing.height, width = processing.width;
-		int fishNum = 4, foodNum = 6, hookNum = 1;
-		
-		fishes = new Fish[fishNum];
-		hook = new Hook(processing);
-		foods = new Food[foodNum];
-		
-		for (int i = 0; i < fishNum; i++) {
-			fishes[i] = new Fish(this.processing);
-		}
-		for (int i = 0; i < foodNum; i++) {
-			foods[i] = new Food(this.processing);
-		}*/
-
+		readSSD(ssdLocations[randomSSD]);
 	}
-
-	public void update() {
+	
+	//Method that handles the updating of the applet
+	public void update() 
+	{
 
 		processing.clear();
 		processing.background(0, 255, 255);
 
-		/*
-		 * for(int row = 0; row < fishPositions.length; row++) {
-		 * Main.placeObjectInTank("><(('>",processing, fishPositions[row][0],
-		 * fishPositions[row][1]); }
-		 */
-		/*
-		 * for(int row = 0; row < foodPositions.length; row++) {
-		 * Main.placeObjectInTank("*",processing, foodPositions[row][0],
-		 * foodPositions[row][1]); } for(int row = 0; row < hookPositions.length; row++)
-		 * { Main.placeObjectInTank("J",processing,
-		 * hookPositions[row][0],hookPositions[row][1]); }
-		 */
+		//Calls update on each fish, food, and hook object
 		for (int i = 0; i < fishes.length; i++) {
 			fishes[i].update();
 			for (int x = 0; x < foods.length; x++) {
@@ -78,28 +63,36 @@ public class SwimSimulation {
 		hook.update();
 
 	}
-
-	public void handleClick(int mouseX, int mouseY) {
-		/*
-		 * hookPositions[0][0] = mouseX; hookPositions[0][1] = processing.height-1;
-		 */
+	//Handles the click by calling the hook's handleClick method
+	public void handleClick(int mouseX, int mouseY)
+	{
+		
 
 		hook.handleClick(mouseX, mouseY);
 	}
-
+	//Attempts to read FileOptions.ssf
 	public static String[] readSSF(File ssf)
 	{
 		String[] files;
 		String sub = "";
+		Scanner reader = null;
 		try
 		{
+			/* This code block reads from the ssf file and seperates the 
+			.ssd file paths within to an array of the locations */
 			int locationSemi;
-			Scanner reader = new Scanner(ssf);
+			reader = new Scanner(ssf);
+			
+			//Reads entire file into the String sub
 			while(reader.hasNextLine())
 			{
 				sub += reader.nextLine();
 			}
+			
+			//Splits the String sub into an array of strings, each element holding one file path
 			files = sub.split(";");
+			
+			//Trims off extra white space and fixes any issues with seperator charactors
 			for(int i = 0; i < files.length; i++)
 			{
 				files[i] = files[i].trim();
@@ -107,18 +100,25 @@ public class SwimSimulation {
 			} 
 			
 			
-		}catch(FileNotFoundException e)
+		}catch(FileNotFoundException e) //If the ssf file is not found, print an error and load the defaults
 		{
 			System.out.println("WARNING: Could not find or open the FileOptions.ssf file.");
 			files = new String[] {null};
 			
 			return files;
 			
+		}finally //Closes Scanner
+		{
+			if(reader != null)
+			{
+				reader.close();
+			}
 		}
 		return files;
 		
 	}
 	
+	//Loads the default values for the number of fish and foods, and gives each object random locations
 	private void loadDefault(PApplet processing)
 	{
 		fishes = new Fish[4];
@@ -134,8 +134,93 @@ public class SwimSimulation {
 		}	
 		
 	}
+	private void readSSD(String ssdLoc)
+	{
+		Scanner reader = null;
+		String[] sub;
+		String[] objectPosition;
+		ArrayList<String> lines = new ArrayList<String>();
+		File ssd = new File(ssdLoc);
+		int index;
+		boolean hasHook = false, hasFish = false, hasFood = false;
+		
+		try {
+			reader = new Scanner(ssd);
+			while(reader.hasNextLine())
+			{
+				lines.add(reader.nextLine());
+			}
+			for(int x = 0; x < lines.size(); x++)
+			{
+				lines.get(x).trim();
+				lines.set(x, lines.get(x).toLowerCase());
+				if(lines.get(x).isEmpty())
+				{
+					lines.remove(x);
+					x--;
+				}
+			}
+			
+			for(int x = 0; x < lines.size(); x++)
+		    {
+				System.out.println("Line " + x + ": "+lines.get(x));
+		    }
+			
+			for(int x = 0; x < lines.size(); x++)
+			{
+				if(lines.get(x).contains("fish"))
+				{
+					hasFish = true;
+					sub = lines.get(x).split(":");
+					sub[1] = sub[1].trim();
+					index = Integer.parseInt(sub[1]);
+					fishes = new Fish[index];
+					for(int y = 1; y <= index; y++)
+					{
+						objectPosition = lines.get( x + y ).split(",");
+						fishes[y - 1] = new Fish(processing, Integer.parseInt(objectPosition[0].trim()), Integer.parseInt(objectPosition[1].trim()));
+					}
+					x += index;
+				}
+				else if(lines.get(x).contains("food"))
+				{
+					hasFood = true;
+					sub = lines.get(x).split(":");
+					sub[1] = sub[1].trim();
+					index = Integer.parseInt(sub[1]);
+					foods = new Food[index];
+					for(int y = 1; y <= index; y++)
+					{
+						objectPosition = lines.get( x + y ).split(",");
+						foods[y - 1] = new Food(processing, Integer.parseInt(objectPosition[0].trim()), Integer.parseInt(objectPosition[1].trim()));
+					}
+					x += index;
+				}
+				else if(lines.get(x).contains("hook"))
+				{
+					hasHook = true;
+					objectPosition = lines.get( x + 1 ).split(",");
+					hook = new Hook(processing, Integer.parseInt(objectPosition[0].trim()), Integer.parseInt(objectPosition[1].trim()));
+				}
+				if(!hasHook || !hasFood || !hasFish)
+				{
+					System.out.println("WARNING: Missing specification for the number and initial positions of fishes, foods, or hook." );
+					throw new NullPointerException();
+				}
+				
+			}
+			
+		}catch(FileNotFoundException e)
+		{
+			System.out.println("WARNING: Could not find or open the " + ssdLoc + " file.");
+			this.loadDefault(this.processing);
+		}catch(NullPointerException e)
+		{
+			this.loadDefault(this.processing);
+		}finally {
+            if( reader != null ) reader.close();
+        }
 	
-	
-	
+	}
 
 }
