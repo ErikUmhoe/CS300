@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.zip.DataFormatException;
 
 public class SwimSimulation {
 
@@ -11,11 +12,6 @@ public class SwimSimulation {
 	private Food[] foods; 
 	private Hook hook; 
 
-	public static void main(String[] args) 
-	{
-		
-		
-	}
 	//Method that sets up necessary requirements for the applet to run
 	public SwimSimulation(PApplet processing) 
 	{
@@ -66,9 +62,8 @@ public class SwimSimulation {
 	//Handles the click by calling the hook's handleClick method
 	public void handleClick(int mouseX, int mouseY)
 	{
-		
-
 		hook.handleClick(mouseX, mouseY);
+		
 	}
 	//Attempts to read FileOptions.ssf
 	public static String[] readSSF(File ssf)
@@ -137,12 +132,12 @@ public class SwimSimulation {
 	private void readSSD(String ssdLoc)
 	{
 		Scanner reader = null;
+		String curObject = "";
 		String[] sub;
 		String[] objectPosition;
 		ArrayList<String> lines = new ArrayList<String>();
 		File ssd = new File(ssdLoc);
 		int index;
-		boolean hasHook = false, hasFish = false, hasFood = false;
 		
 		try {
 			reader = new Scanner(ssd);
@@ -150,6 +145,7 @@ public class SwimSimulation {
 			{
 				lines.add(reader.nextLine());
 			}
+			
 			for(int x = 0; x < lines.size(); x++)
 			{
 				lines.get(x).trim();
@@ -160,17 +156,17 @@ public class SwimSimulation {
 					x--;
 				}
 			}
-			
+
 			for(int x = 0; x < lines.size(); x++)
-		    {
+			{
 				System.out.println("Line " + x + ": "+lines.get(x));
-		    }
-			
+			}
+
 			for(int x = 0; x < lines.size(); x++)
 			{
 				if(lines.get(x).contains("fish"))
 				{
-					hasFish = true;
+					curObject = "FISH";
 					sub = lines.get(x).split(":");
 					sub[1] = sub[1].trim();
 					index = Integer.parseInt(sub[1]);
@@ -181,10 +177,19 @@ public class SwimSimulation {
 						fishes[y - 1] = new Fish(processing, Integer.parseInt(objectPosition[0].trim()), Integer.parseInt(objectPosition[1].trim()));
 					}
 					x += index;
+
+					for(int y = 0; y < fishes.length; y++)
+					{
+						if(fishes[y] == null)
+						{
+							throw new DataFormatException();
+						}
+					}
 				}
+
 				else if(lines.get(x).contains("food"))
 				{
-					hasFood = true;
+					curObject = "FOOD";
 					sub = lines.get(x).split(":");
 					sub[1] = sub[1].trim();
 					index = Integer.parseInt(sub[1]);
@@ -195,27 +200,57 @@ public class SwimSimulation {
 						foods[y - 1] = new Food(processing, Integer.parseInt(objectPosition[0].trim()), Integer.parseInt(objectPosition[1].trim()));
 					}
 					x += index;
+					for(int y = 0; y < foods.length; y++)
+					{
+						if(foods[y] == null)
+						{
+							throw new DataFormatException();
+						}
+					}
 				}
+
 				else if(lines.get(x).contains("hook"))
 				{
-					hasHook = true;
+					curObject = "HOOK";
 					objectPosition = lines.get( x + 1 ).split(",");
 					hook = new Hook(processing, Integer.parseInt(objectPosition[0].trim()), Integer.parseInt(objectPosition[1].trim()));
+					if(hook == null)
+					{
+						throw new DataFormatException();
+					}
+					x++;
 				}
-				if(!hasHook || !hasFood || !hasFish)
+				else
 				{
-					System.out.println("WARNING: Missing specification for the number and initial positions of fishes, foods, or hook." );
-					throw new NullPointerException();
+					throw new DataFormatException();
 				}
-				
 			}
-			
+
+			if( fishes == null || foods == null || hook == null)
+			{
+				System.out.println("Warning: Missing specification for the number and initial positions of fishes, foods, or hook.");
+				throw new DataFormatException();
+			}
 		}catch(FileNotFoundException e)
 		{
 			System.out.println("WARNING: Could not find or open the " + ssdLoc + " file.");
 			this.loadDefault(this.processing);
 		}catch(NullPointerException e)
 		{
+			System.out.println("WARNING: Failed to load objects and positions from file.");
+			this.loadDefault(this.processing);
+		}catch(ArrayIndexOutOfBoundsException e)
+		{
+			System.out.println("Warning Number of " + curObject + " does not match number of " + curObject + " positions.");
+			this.loadDefault(this.processing);
+		}catch(NumberFormatException e)
+		{
+			System.out.println("Warning Number of " + curObject + " does not match number of " + curObject + " positions.");
+			this.loadDefault(this.processing);
+		}
+		catch(DataFormatException e)
+		{
+			System.out.println("Warning Number of " + curObject + " does not match number of " + curObject + " positions.");
 			this.loadDefault(this.processing);
 		}finally {
             if( reader != null ) reader.close();
