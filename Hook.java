@@ -7,11 +7,11 @@
  *@since 2017-10-04
  */
 public class Hook {
-	
+
 	private PApplet processing;
 	PImage img;
 	private int x, y;
-	
+
 	/**
 	 * Constructor that creates new Hook w/ random locations
 	 * 
@@ -24,7 +24,7 @@ public class Hook {
 		x = Utility.randomInt( processing.width );
 		y = Utility.randomInt( processing.height );
 	}
-	
+
 	/**
 	 * Constructor that creates new Hook w/ set locations
 	 * 
@@ -39,7 +39,7 @@ public class Hook {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * Updates the location of the hook coordinates
 	 */
@@ -50,18 +50,18 @@ public class Hook {
 		{
 			y += -( processing.height + 50 - y ) / 50;
 		}
-		
+
 		// If the hook is at the top of the screen, move it back to the bottom
 		else
 		{
 			y = processing.height - 1;
 		}
-		
+
 		processing.fill( 0 );
 		processing.line( x+4, y-5, x+4, 0 );
 		processing.image( img, x, y );
 	}
-	
+
 	/**
 	 * Moves hook x coordinate to the location of the click,
 	 * and the y coordinate to the bottom of the applet
@@ -74,7 +74,7 @@ public class Hook {
 		x = mouseX;
 		y = processing.height-1;
 	}
-	
+
 	/**
 	 * Handles collisions b/w hook and fish
 	 * 

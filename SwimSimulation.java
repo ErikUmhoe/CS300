@@ -42,7 +42,7 @@ public class SwimSimulation {
 		}
 		// Randomly selects a file location for ssd file
 		int randomSSD = Utility.randomInt(ssdLocations.length);
-		
+
 		// Reads the ssd file and sets up fish tank objects
 		readSSD(ssdLocations[randomSSD]);
 	}
@@ -70,7 +70,7 @@ public class SwimSimulation {
 		hook.update();
 
 	}
-	
+
 	/**
 	 * Handles the click by calling the hook's handleClick method.
 	 * 
@@ -82,7 +82,7 @@ public class SwimSimulation {
 		hook.handleClick(mouseX, mouseY);
 
 	}
-	
+
 	/**
 	 * Attempts to read FileOptions.ssf.
 	 * 
@@ -94,7 +94,7 @@ public class SwimSimulation {
 		String[] files;
 		String sub = "";
 		Scanner reader = null;
-		
+
 		try
 		{
 			/* This code block reads from the ssf file and seperates the 
@@ -148,7 +148,7 @@ public class SwimSimulation {
 		fishes = new Fish[4];
 		foods = new Food[6];
 		hook = new Hook(this.processing);
-		
+
 		for(int i = 0; i < fishes.length; i++)
 		{
 			fishes[i] = new Fish(processing);
@@ -159,7 +159,7 @@ public class SwimSimulation {
 		}	
 
 	}
-	
+
 	/**
 	 * Attempts to read a file location with type .ssd.
 	 * 
@@ -178,17 +178,17 @@ public class SwimSimulation {
 		try {
 			// Attempts to read the ssd file
 			reader = new Scanner(ssd);
-			
+
 			// Transfers the lines of text to an Array List
 			while(reader.hasNextLine())
 			{
 				lines.add(reader.nextLine());
 			}
-			
+
 			// Trims each line, sets it to lower case, and removes line if blank.
 			for(int x = 0; x < lines.size(); x++)
 			{
-				lines.get(x).trim();
+				lines.set(x, lines.get(x).trim());
 				lines.set(x, lines.get(x).toLowerCase());
 				if(lines.get(x).isEmpty())
 				{
@@ -196,7 +196,7 @@ public class SwimSimulation {
 					x--;
 				}
 			}
-			
+
 			// Goes through list object and sets up fish, food, and hook objects
 			for(int x = 0; x < lines.size(); x++)
 			{
@@ -210,24 +210,24 @@ public class SwimSimulation {
 					 */
 					sub = lines.get(x).split(":");
 					sub[1] = sub[1].trim();
-					
+
 					// Gets the amount of fish objects to set up
 					index = Integer.parseInt(sub[1]);
-					
+
 					fishes = new Fish[index];
-					
+
 					// Sets up every fish object needed
 					for(int y = 1; y <= index; y++)
 					{
 						// Splits up the x and y positions of fish object
 						objectPosition = lines.get( x + y ).split(",");
-						
+
 						// Adds Fish object to fishes array using trimed x and y
 						fishes[y - 1] = new Fish(processing, Integer.parseInt(
 								objectPosition[0].trim()),
 								Integer.parseInt(objectPosition[1].trim()));
 					}
-					
+
 					// Sets x to skip the lines used to set up the fishes array
 					x += index;
 
@@ -240,38 +240,38 @@ public class SwimSimulation {
 						}
 					}
 				}
-				
+
 				// Checks if the current line is setting up food object
 				else if(lines.get(x).contains("food"))
 				{
 					curObject = "FOOD";
-					
+
 					/* Splits up the current line to get the amount of objects to set up,
 					 *  and trims it
 					 */
 					sub = lines.get(x).split(":");
 					sub[1] = sub[1].trim();
-					
+
 					// Gets the amount of food objects to set up
 					index = Integer.parseInt(sub[1]);
-					
+
 					foods = new Food[index];
-					
+
 					// Sets up every food object needed
 					for(int y = 1; y <= index; y++)
 					{
 						// Splits up the x and y positions of food object
 						objectPosition = lines.get( x + y ).split(",");
-						
+
 						// Adds Food object to foods array using trimed x and y
 						foods[y - 1] = new Food(processing, Integer.parseInt(
 								objectPosition[0].trim()),
 								Integer.parseInt(objectPosition[1].trim()));
 					}
-					
+
 					// Sets x to skip the lines used to set up the foods array
 					x += index;
-					
+
 					// Checks to make sure the correct amount of Food objects was set up
 					for(int y = 0; y < foods.length; y++)
 					{
@@ -281,30 +281,30 @@ public class SwimSimulation {
 						}
 					}
 				}
-				
+
 				// Checks if the current line is setting up hook object
 				else if(lines.get(x).contains("hook"))
 				{
 					curObject = "HOOK";
-					
+
 					// Splits up the x and y position of hook object
 					objectPosition = lines.get( x + 1 ).split(",");
-					
+
 					// Adds Fish object to fishes array using trimed x and y
 					hook = new Hook(processing, Integer.parseInt(objectPosition[0].trim()),
 							Integer.parseInt(objectPosition[1].trim()));
-					
+
 					// Sets x to skip the lines used to set up the hook object
 					x++;
-					
+
 					// Checks to make sure the correct amount of Hook objects was set up
 					if(hook == null)
 					{
 						throw new DataFormatException();
 					}
-					
+
 				}
-				
+
 				// Checks if any extra positions were added
 				else
 				{

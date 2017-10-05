@@ -7,11 +7,11 @@
  *@since 2017-10-04
  */
 public class Food {
-	
+
 	private PApplet processing;
 	PImage img;
 	private int x, y;
-	
+
 	/**
 	 * Constructor that creates a new food w/ random locations
 	 * 
@@ -24,7 +24,7 @@ public class Food {
 		x = Utility.randomInt( processing.width );
 		y = Utility.randomInt( processing.height );
 	}
-	
+
 	/**
 	 * Constructor that creates a new food w/ set locations
 	 * 
@@ -39,7 +39,7 @@ public class Food {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * Changes the location of the food
 	 */
@@ -50,28 +50,28 @@ public class Food {
 		{
 			x -= 1;
 		}
-		
+
 		// If food is on the left edge of the screen, move it to the right edge
 		else
 		{
 			x = processing.width - 1;
 		}
-		
+
 		// If food is not on the bottom of the screen, move it one down
 		if( y < processing.height-1 )
 		{
 			y += 1;
 		}
-		
+
 		// If food is on the bottom of the screen, move it to the top of the screen
 		else
 		{
 			y = 0;
 		}
-		
+
 		processing.image(img,x,y);
 	}
-	
+
 	/**
 	 * Returns the distance of the food to an object
 	 * 
@@ -85,7 +85,7 @@ public class Food {
 		double deltaYSquared = Math.pow( ( y - this.y ), 2 );
 		return new Float( Math.abs( Math.sqrt( deltaXSquared + deltaYSquared ) ) );
 	}
-	
+
 	/**
 	 * If the food collides with a fish, set the food x coordinate to a random position
 	 * and move the food to the top of the screen

@@ -45,29 +45,29 @@
  *@since 2017-10-04
  */
 public class Main {
-	
+
 	private static SwimSimulation swimSimulation;
-	
+
 	/**
 	 * Main method that starts the simulation.
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		Utility.startSimulation();
 	}
-	
+
 	/**
 	 * Setup method that creates a new SwimSimulation Object.
 	 * 
 	 * @param data
 	 */
 	public static void setup(Data data) {
-		
+
 		swimSimulation = new SwimSimulation(data.processing);
 	}
-	
+
 	/**
 	 * Update method every time the simulation updates.
 	 * Routes update info to swimSimulation Object.
@@ -75,7 +75,7 @@ public class Main {
 	 * @param data
 	 */
 	public static void update(Data data) {
-		
+
 		swimSimulation.update();
 	}
 

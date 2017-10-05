@@ -7,11 +7,11 @@
  *@since 2017-10-04
  */
 public class Fish {
-	
+
 	private PApplet processing;
 	PImage img;
 	private int x, y;
-	
+
 	/**
 	 * Constructor that creates a new fish w/ random locations
 	 * 
@@ -24,7 +24,7 @@ public class Fish {
 		x = Utility.randomInt( processing.width );
 		y = Utility.randomInt( processing.height );
 	}
-	
+
 	/**
 	 * Constructor that creates a new fish w/ set locations
 	 * 
@@ -39,7 +39,7 @@ public class Fish {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * Updates location of the fish
 	 */
@@ -50,16 +50,16 @@ public class Fish {
 		{
 			x += 1;
 		}
-		
+
 		//If fish is on the right edge of the screen,  move it to the left edge
 		else
 		{
 			x = 0;
 		}
-		
+
 		processing.image( img, x, y );
 	}
-	
+
 	/**
 	 * Method that detects collision b/w food and fish
 	 * 
@@ -70,7 +70,7 @@ public class Fish {
 		if( food.distanceTo( x, y ) < 40 )
 			food.getEaten();
 	}
-	
+
 	/**
 	 * Finds the distance b/w the food and the fish
 	 * 
