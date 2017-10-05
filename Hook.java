@@ -1,59 +1,88 @@
-
+/**
+ * This is a hook object.
+ *
+ *@author Nick Stoffel
+ *@author Erik Umhoefer
+ *@version 4.0
+ *@since 2017-10-04
+ */
 public class Hook {
 	
-	private int hookX, hookY; //Hook X and Y Pos
 	private PApplet processing;
-	private PImage hookImage;
+	PImage img;
+	private int x, y;
 	
-	//Constructor that creates new Hook w/ random locations
+	/**
+	 * Constructor that creates new Hook w/ random locations
+	 * 
+	 * @param processing
+	 */
 	public Hook(PApplet processing)
 	{
 		this.processing = processing;
-		hookImage = processing.loadImage("images" + java.io.File.separator + "HOOK.png");
-		hookX = Utility.randomInt(this.processing.width);
-		hookY = Utility.randomInt(this.processing.height);
+		img = processing.loadImage( "images" + java.io.File.separator + "HOOK.png" );
+		x = Utility.randomInt( processing.width );
+		y = Utility.randomInt( processing.height );
 	}
 	
-	//Constructor that creates new Hook w/ set locations
+	/**
+	 * Constructor that creates new Hook w/ set locations
+	 * 
+	 * @param processing
+	 * @param x
+	 * @param y
+	 */
 	public Hook(PApplet processing, int x, int y)
 	{
 		this.processing = processing;
-		hookImage = processing.loadImage("images" + java.io.File.separator + "HOOK.png");
-		hookX = x;
-		hookY = y;
+		img = processing.loadImage( "images" + java.io.File.separator + "HOOK.png" );
+		this.x = x;
+		this.y = y;
 	}
-	//Updates the location of the hook coordinates
+	
+	/**
+	 * Updates the location of the hook coordinates
+	 */
 	public void update()
-	{	
+	{
 		//If hook is not at the top of the screen, keep moving
-		if(hookY > 0)
+		if( y > 0 )
 		{
-			hookY += -(processing.height + 50 - hookY)/50;
+			y += -( processing.height + 50 - y ) / 50;
 		}
-		//If the hook is at the top of the screen, move it back to the botttom
+		
+		// If the hook is at the top of the screen, move it back to the bottom
 		else
 		{
-			hookY = processing.height;
-			hookY += -(processing.height + 50 - hookY)/50;
+			y = processing.height - 1;
 		}
-		processing.image(hookImage,hookX, hookY);
-		processing.line(hookX+4,hookY-5,hookX+4,0);
+		
+		processing.fill( 0 );
+		processing.line( x+4, y-5, x+4, 0 );
+		processing.image( img, x, y );
 	}
 	
-	//Handles collisions b/w hook and fish
-	public void tryToCatch(Fish fish)
-	{
-		if(fish.distanceTo(hookX, hookY) < 40)
-		{
-			fish.getEaten();
-		}
-	}
-	
-	//Moves hook x coordinate to the location of the click, and the y coordinate to the bottom of the applet
+	/**
+	 * Moves hook x coordinate to the location of the click,
+	 * and the y coordinate to the bottom of the applet
+	 * 
+	 * @param mouseX
+	 * @param mouseY
+	 */
 	public void handleClick(int mouseX, int mouseY)
 	{
-		hookX = mouseX;
-		hookY = processing.height-1;
+		x = mouseX;
+		y = processing.height-1;
 	}
-
+	
+	/**
+	 * Handles collisions b/w hook and fish
+	 * 
+	 * @param fish
+	 */
+	public void tryToCatch(Fish fish)
+	{
+		if( fish.distanceTo( x, y ) < 40 )
+			fish.getCaught();
+	}
 }

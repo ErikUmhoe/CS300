@@ -4,14 +4,14 @@
 //Files:           Hook.java, Fish.java, Food.java, Swimsulation.java, FishOptions.ssf, any amount of Swim Simulation Data (.ssd) files
 //Course:          CS300, fall term, 2017
 //
-//Author:         	Erik Umhoefer
-//Email:          	ejumhoefer@wisc.edu
+//Author:         	Nick Stoffel
+//Email:          	nastoffel@wisc.edu
 //Lecturer's Name: 	Gary Dahl
 //
 ////////////////////PAIR PROGRAMMERS COMPLETE THIS SECTION ///////////////////
 //
-//Partner Name:    Nick Stoffel
-//Partner Email:   nastoffel@wisc.edu
+//Partner Name:    Erik Umhoefer
+//Partner Email:   ejumhoefer@wisc.edu
 //Lecturer's Name: Gary Dahl
 //
 //VERIFY THE FOLLOWING BY PLACING AN X NEXT TO EACH TRUE STATEMENT:
@@ -30,43 +30,65 @@
 //Persons:         NONE
 //Online Sources: 	https://docs.oracle.com/javase/7/docs/api/java/util/Arrays.html (JavaDoc for arrays)
 //					https://www.javatpoint.com/java-string-isempty (Information regarding the isEmpty() method)
-//				
+//					https://www.tutorialspoint.com/java/java_documentation.htm (JavaDoc Comment documentation)
 //	
 //
 /////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 
-
+/**
+ * This program is the driver class for a fish tank simulation that 
+ * creates an animated applet of a fish tank.
+ *
+ *@author Nick Stoffel
+ *@author Erik Umhoefer
+ *@version 4.0
+ *@since 2017-10-04
+ */
 public class Main {
-
-	private static SwimSimulation swimSim;
-	public static void main(String[] args) 
-	{
+	
+	private static SwimSimulation swimSimulation;
+	
+	/**
+	 * Main method that starts the simulation.
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
 		
-		//Starts the swimSimulation
 		Utility.startSimulation();
-		
-		
-	}
-	public static void setup(Data data) 
-	{
-		//Instantiates new swimSimulation object 
-		swimSim = new SwimSimulation(data.processing);
-		
-		
 	}
 	
-	public static void update(Data data) 
-	{
+	/**
+	 * Setup method that creates a new SwimSimulation Object.
+	 * 
+	 * @param data
+	 */
+	public static void setup(Data data) {
 		
-		swimSim.update();	
+		swimSimulation = new SwimSimulation(data.processing);
+	}
+	
+	/**
+	 * Update method every time the simulation updates.
+	 * Routes update info to swimSimulation Object.
+	 * 
+	 * @param data
+	 */
+	public static void update(Data data) {
 		
-		
+		swimSimulation.update();
 	}
 
-	
+	/**
+	 * Detects user input, in this case a mouse click.
+	 * Routes mouse click info to swimSimluation Object.
+	 * 
+	 * @param data
+	 * @param mouseX
+	 * @param mouseY
+	 */
 	public static void onClick(Data data, int mouseX, int mouseY)
 	{
-		//Calls swimSim handleclick method, passing the click input to be handled by swimSim
-		swimSim.handleClick(mouseX, mouseY);
+		swimSimulation.handleClick(mouseX, mouseY);
 	}
 }

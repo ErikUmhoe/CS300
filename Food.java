@@ -1,73 +1,98 @@
-
+/**
+ * This is a food object.
+ *
+ *@author Nick Stoffel
+ *@author Erik Umhoefer
+ *@version 4.0
+ *@since 2017-10-04
+ */
 public class Food {
 	
-	private int foodX, foodY; //Food x and Y
 	private PApplet processing;
-	private PImage foodImage;
+	PImage img;
+	private int x, y;
 	
-	//Constructor that creates a new food w/ random locations
+	/**
+	 * Constructor that creates a new food w/ random locations
+	 * 
+	 * @param processing
+	 */
 	public Food(PApplet processing)
 	{
 		this.processing = processing;
-		foodImage = processing.loadImage("images" + java.io.File.separator + "FOOD.png");
-		foodX = Utility.randomInt(this.processing.width);
-		foodY = Utility.randomInt(this.processing.height);
+		img = processing.loadImage( "images" + java.io.File.separator + "FOOD.png" );
+		x = Utility.randomInt( processing.width );
+		y = Utility.randomInt( processing.height );
 	}
 	
-	//Constructor that creates a new food w/ set locations
+	/**
+	 * Constructor that creates a new food w/ set locations
+	 * 
+	 * @param processing
+	 * @param x
+	 * @param y
+	 */
 	public Food(PApplet processing, int x, int y)
 	{
 		this.processing = processing;
-		foodImage = processing.loadImage("images" + java.io.File.separator + "FOOD.png");
-		foodX = x;
-		foodY = y;
+		img = processing.loadImage( "images" + java.io.File.separator + "FOOD.png" );
+		this.x = x;
+		this.y = y;
 	}
 	
-	//Changes the location of the food
+	/**
+	 * Changes the location of the food
+	 */
 	public void update()
 	{
-		//If food is not on the left edge of the screen, move one to the left
-		if(foodX > 0)
+		// If food is not on the left edge of the screen, move one to the left
+		if( x > 0 )
 		{
-			foodX--;
+			x -= 1;
 		}
 		
-		//If food is on the left edge of the screen, move it to the right edge
+		// If food is on the left edge of the screen, move it to the right edge
 		else
 		{
-			foodX = processing.width;
+			x = processing.width - 1;
 		}
 		
-		//If food is not on the bottom of the screen, move it one down
-		if(foodY < processing.height)
+		// If food is not on the bottom of the screen, move it one down
+		if( y < processing.height-1 )
 		{
-			foodY++;
+			y += 1;
 		}
 		
-		//If food is on the bottom of the screen, move it to the top of the screen
+		// If food is on the bottom of the screen, move it to the top of the screen
 		else
 		{
-			foodY = 0;
+			y = 0;
 		}
-		processing.image(foodImage,foodX, foodY);
-	}
-	
-	
-	//Returns the distance of the food to an object
-	public float distanceTo(int x, int y)
-	{
-		return new Float(Math.abs(Math.sqrt((Math.abs(x - foodX)*Math.abs(x - foodX))
-				+ (Math.abs(y - foodY)*Math.abs(y - foodY)))));
 		
+		processing.image(img,x,y);
 	}
 	
-	//If the food collides with a fish, set the food x coordinate to a random position and move the food to the top of the screen
-	public void getEaten()
+	/**
+	 * Returns the distance of the food to an object
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public float distanceTo(int x, int y) 
 	{
-		foodX = Utility.randomInt(this.processing.width);
-		foodY = 0;
+		double deltaXSquared = Math.pow( ( x - this.x ), 2 );
+		double deltaYSquared = Math.pow( ( y - this.y ), 2 );
+		return new Float( Math.abs( Math.sqrt( deltaXSquared + deltaYSquared ) ) );
 	}
-
+	
+	/**
+	 * If the food collides with a fish, set the food x coordinate to a random position
+	 * and move the food to the top of the screen
+	 */
+	public void getEaten() 
+	{
+		x = Utility.randomInt( processing.width );
+		y = processing.height-1;
+	}
 }
-
-
