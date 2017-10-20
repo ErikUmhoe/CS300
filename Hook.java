@@ -6,73 +6,70 @@
  *@version 4.0
  *@since 2017-10-04
  */
-public class Hook {
+public class Hook extends SimObject{
 
-	private PApplet processing;
-	PImage img;
-	private int x, y;
+	
 
 	/**
 	 * Constructor that creates new Hook w/ random locations
 	 * 
 	 * @param processing
 	 */
-	public Hook(PApplet processing)
+	public Hook()
 	{
-		this.processing = processing;
-		img = processing.loadImage( "images" + java.io.File.separator + "HOOK.png" );
-		x = Utility.randomInt( processing.width );
-		y = Utility.randomInt( processing.height );
+		super( "images" + java.io.File.separator + "HOOK.png" );
+		this.xPos = Utility.randomInt( processing.width );
+		this.yPos = Utility.randomInt( processing.height );
 	}
 
 	/**
 	 * Constructor that creates new Hook w/ set locations
 	 * 
 	 * @param processing
-	 * @param x
-	 * @param y
+	 * @param xPos
+	 * @param yPos
 	 */
-	public Hook(PApplet processing, int x, int y)
+	public Hook(int xPos, int yPos)
 	{
-		this.processing = processing;
-		img = processing.loadImage( "images" + java.io.File.separator + "HOOK.png" );
-		this.x = x;
-		this.y = y;
+		super( "images" + java.io.File.separator + "HOOK.png" );
+		this.xPos = xPos;
+		this.yPos = yPos;
 	}
 
 	/**
 	 * Updates the location of the hook coordinates
 	 */
+	@Override
 	public void update()
 	{
 		//If hook is not at the top of the screen, keep moving
-		if( y > 0 )
+		if( yPos > 0 )
 		{
-			y += -( processing.height + 50 - y ) / 50;
+			yPos += -( processing.height + 50 - yPos ) / 50;
 		}
 
 		// If the hook is at the top of the screen, move it back to the bottom
 		else
 		{
-			y = processing.height - 1;
+			yPos = processing.height - 1;
 		}
 
 		processing.fill( 0 );
-		processing.line( x+4, y-5, x+4, 0 );
-		processing.image( img, x, y );
+		processing.line( xPos+4, yPos-5, xPos+4, 0 );
+		processing.image( image, xPos, yPos );
 	}
 
 	/**
-	 * Moves hook x coordinate to the location of the click,
-	 * and the y coordinate to the bottom of the applet
+	 * Moves hook xPos coordinate to the location of the click,
+	 * and the yPos coordinate to the bottom of the applet
 	 * 
 	 * @param mouseX
 	 * @param mouseY
 	 */
 	public void handleClick(int mouseX, int mouseY)
 	{
-		x = mouseX;
-		y = processing.height-1;
+		xPos = mouseX;
+		yPos = processing.height-1;
 	}
 
 	/**
@@ -80,9 +77,17 @@ public class Hook {
 	 * 
 	 * @param fish
 	 */
-	public void tryToCatch(Fish fish)
+	@Override
+	public void tryToInteract(SimObject other)
 	{
-		if( fish.distanceTo( x, y ) < 40 )
-			fish.getCaught();
+		
+		if(other instanceof Fish)
+		{
+			if( other.distanceTo( this.xPos, this.yPos ) < 40 )
+			{
+				((Fish)other).getCaught();
+
+			}
+		}
 	}
 }

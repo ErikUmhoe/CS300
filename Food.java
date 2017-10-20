@@ -6,93 +6,86 @@
  *@version 4.0
  *@since 2017-10-04
  */
-public class Food {
+public class Food extends SimObject{
 
-	private PApplet processing;
-	PImage img;
-	private int x, y;
-
+	
 	/**
 	 * Constructor that creates a new food w/ random locations
 	 * 
 	 * @param processing
 	 */
-	public Food(PApplet processing)
+	public Food()
 	{
-		this.processing = processing;
-		img = processing.loadImage( "images" + java.io.File.separator + "FOOD.png" );
-		x = Utility.randomInt( processing.width );
-		y = Utility.randomInt( processing.height );
+		super("images" + java.io.File.separator + "FOOD.png");
 	}
 
 	/**
 	 * Constructor that creates a new food w/ set locations
 	 * 
 	 * @param processing
-	 * @param x
-	 * @param y
+	 * @param xPos
+	 * @param yPos
 	 */
-	public Food(PApplet processing, int x, int y)
+	public Food(int xPos, int yPos)
 	{
-		this.processing = processing;
-		img = processing.loadImage( "images" + java.io.File.separator + "FOOD.png" );
-		this.x = x;
-		this.y = y;
+		super("images" + java.io.File.separator + "FOOD.png", xPos, yPos);
 	}
 
 	/**
 	 * Changes the location of the food
 	 */
+	@Override
 	public void update()
 	{
 		// If food is not on the left edge of the screen, move one to the left
-		if( x > 0 )
+		if( xPos > 0 )
 		{
-			x -= 1;
+			xPos -= 1;
 		}
 
 		// If food is on the left edge of the screen, move it to the right edge
 		else
 		{
-			x = processing.width - 1;
+			xPos = processing.width - 1;
 		}
 
 		// If food is not on the bottom of the screen, move it one down
-		if( y < processing.height-1 )
+		if( yPos < processing.height-1 )
 		{
-			y += 1;
+			yPos += 1;
 		}
 
 		// If food is on the bottom of the screen, move it to the top of the screen
 		else
 		{
-			y = 0;
+			yPos = 0;
 		}
 
-		processing.image(img,x,y);
+		processing.image(image,xPos,yPos);
 	}
 
 	/**
 	 * Returns the distance of the food to an object
 	 * 
-	 * @param x
-	 * @param y
+	 * @param xPos
+	 * @param yPos
 	 * @return
 	 */
-	public float distanceTo(int x, int y) 
+	public float distanceTo(int xPos, int yPos) 
 	{
-		double deltaXSquared = Math.pow( ( x - this.x ), 2 );
-		double deltaYSquared = Math.pow( ( y - this.y ), 2 );
+		double deltaXSquared = Math.pow( ( xPos - this.xPos ), 2 );
+		double deltaYSquared = Math.pow( ( yPos - this.yPos ), 2 );
 		return new Float( Math.abs( Math.sqrt( deltaXSquared + deltaYSquared ) ) );
 	}
 
 	/**
-	 * If the food collides with a fish, set the food x coordinate to a random position
+	 * If the food collides with a fish, set the food xPos coordinate to a random position
 	 * and move the food to the top of the screen
 	 */
 	public void getEaten() 
 	{
-		x = Utility.randomInt( processing.width );
-		y = processing.height-1;
+//		xPos = Utility.randomInt( processing.width );
+//		yPos = processing.height-1;
+		remove = true;
 	}
 }

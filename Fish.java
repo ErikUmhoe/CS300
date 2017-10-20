@@ -6,58 +6,56 @@
  *@version 4.0
  *@since 2017-10-04
  */
-public class Fish {
-
-	private PApplet processing;
-	PImage img;
-	private int x, y;
+public class Fish extends SimObject{
 
 	/**
 	 * Constructor that creates a new fish w/ random locations
 	 * 
 	 * @param processing
 	 */
-	public Fish(PApplet processing)
+	public Fish()
 	{
-		this.processing = processing;
-		img = processing.loadImage( "images" + java.io.File.separator + "FISH.png" );
-		x = Utility.randomInt( processing.width );
-		y = Utility.randomInt( processing.height );
+
+		super( "images" + java.io.File.separator + "FISH.png" );
+		this.xPos = Utility.randomInt( processing.width );
+		this.yPos = Utility.randomInt( processing.height );
+		
 	}
 
 	/**
 	 * Constructor that creates a new fish w/ set locations
 	 * 
 	 * @param processing
-	 * @param x
-	 * @param y
+	 * @param xPos
+	 * @param yPos
 	 */
-	public Fish(PApplet processing, int x, int y)
+	public Fish(int xPos, int yPos)
 	{
-		this.processing = processing;
-		img = processing.loadImage( "images" + java.io.File.separator + "FISH.png" );
-		this.x = x;
-		this.y = y;
+
+		super( "images" + java.io.File.separator + "FISH.png" );
+		this.xPos = xPos;
+		this.yPos = yPos;
 	}
 
 	/**
 	 * Updates location of the fish
 	 */
+	@Override
 	public void update()
 	{
 		//If fish is not on the right edge of the screen, move it one unit to the right
-		if(x < processing.width-1)
+		if(xPos < processing.width-1)
 		{
-			x += 1;
+			xPos += 1;
 		}
 
 		//If fish is on the right edge of the screen,  move it to the left edge
 		else
 		{
-			x = 0;
+			xPos = 0;
 		}
 
-		processing.image( img, x, y );
+		processing.image( image, xPos, yPos );
 	}
 
 	/**
@@ -65,34 +63,43 @@ public class Fish {
 	 * 
 	 * @param food
 	 */
-	public void tryToEat(Food food)
+	@Override
+	public void tryToInteract(SimObject other)
 	{
-		if( food.distanceTo( x, y ) < 40 )
-			food.getEaten();
+		//Fish eating some food
+		if(other instanceof Food)
+		{
+			if(other.distanceTo(xPos, yPos) < 40)
+			{
+				((Food)other).getEaten();
+//				other.xPos = Utility.randomInt( processing.width );
+//				other.yPos = processing.height-1;
+			}
+		}
 	}
 
 	/**
 	 * Finds the distance b/w the food and the fish
 	 * 
-	 * @param x
-	 * @param y
+	 * @param xPos
+	 * @param yPos
 	 * @return
 	 */
-	public float distanceTo(int x, int y)
+	public float distanceTo(int xPos, int yPos)
 	{
-		double deltaXSquared = Math.pow( ( x - this.x ), 2 );
-		double deltaYSquared = Math.pow( ( y - this.y ), 2 );
+		double deltaXSquared = Math.pow( ( xPos - this.xPos ), 2 );
+		double deltaYSquared = Math.pow( ( yPos - this.yPos ), 2 );
 		return new Float( Math.abs( Math.sqrt( deltaXSquared + deltaYSquared ) ) );
 	}
 
 	/**
-	 * If the fish is caught by the hook, move the fish to a random y position
+	 * If the fish is caught by the hook, move the fish to a random yPos position
 	 * and to the left edge of the screen
 	 */
 	public void getCaught()
 	{
-		x = 0;
-		y = Utility.randomInt( processing.height );
+		xPos = 0;
+		yPos = Utility.randomInt( processing.height );
 	}
 
 }
