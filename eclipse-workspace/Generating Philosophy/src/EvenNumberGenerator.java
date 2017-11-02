@@ -1,5 +1,12 @@
 import java.util.Iterator;
 
+/**
+ * Class that creates a linked list of Integers that is iterable and an interator.
+ * 
+ * @author Erik U
+ * @author Nick S
+ *
+ */
 public class EvenNumberGenerator implements Iterable<Integer>, Iterator<Integer>{
 
 	// Current node.
