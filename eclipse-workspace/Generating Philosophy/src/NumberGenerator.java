@@ -1,12 +1,14 @@
 import java.util.Iterator;
 import java.util.function.Function;
 
+
+//This class creates an iterable object that can be iterated upon to increase the number in a way defined by a user passed in function
 public class NumberGenerator implements Iterable<Integer>, Iterator<Integer>, Function<Integer,Integer>{
 	
-	private Integer current;
-	private int numberOfEvens;
-	private int count;
-	private Function<Integer, Integer> func;
+	private Integer current;	//Current node 
+	private int numberOfEvens;	//Number of even objects desired to be printed / created
+	private int count;			//Variable to be used in hasNext() method to make sure that no iteration past the number of evens desired occurs
+	private Function<Integer, Integer> func;	//Function to be passed in that decides what to do to the numbers
 	
 	
 	/**
@@ -33,19 +35,20 @@ public class NumberGenerator implements Iterable<Integer>, Iterator<Integer>, Fu
 	   count = 0;
 	   func = num;
 	}
-
+	
+	//Allows for iteration through generator
 	@Override
 	public Iterator<Integer> iterator() {
 		// TODO Auto-generated method stub
 		return this;
 	}
-
+	//Returns whether iteration can continue or not
 	@Override
 	public boolean hasNext() {
 		
 		return count < numberOfEvens;
 	}
-
+	//Returns the next node with the function applied to the previous node.
 	@Override
 	public Integer next() {
 		Integer item = current;
@@ -53,7 +56,7 @@ public class NumberGenerator implements Iterable<Integer>, Iterator<Integer>, Fu
 		count++;
 		return item;
 	}
-
+	//Applies the passed in function to the current node, returning the new node.
 	@Override
 	public Integer apply(Integer t) {
 		// TODO Auto-generated method stub
