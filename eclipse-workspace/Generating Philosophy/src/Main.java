@@ -45,31 +45,39 @@ public class Main {
 
 		String wikiChoice;
 		Scanner input = new Scanner(System.in);
+		
 		System.out.print("Please enter a Wikipedia topic: " );
 		wikiChoice = input.nextLine();
-		wikiChoice = wikiChoice.replaceAll(" ", "_");
+		wikiChoice = wikiChoice.replaceAll(" ", "_"); // Replaces all spaces with "_"
 		wikiChoice = wikiChoice.trim();
 
 		int count = 0;
-		// for each loop to go through a generated list Wikipedia pages until it fails or reaches Philosophy
-		for(String i : new Generator<String>(100,"/wiki/"+wikiChoice,new NetWikiLinkFunction()))
+		// For each loop to go through a generated list Wikipedia pages until it 
+		// fails or reaches Philosophy
+		for(String i : new Generator<String>(100,"/wiki/"+wikiChoice,new NextWikiLinkFunction()))
 		{
 			System.out.println(count +": " + i);
 			count++;
 			if(i.indexOf("Philosophy") > 0)
 			{	
-				break;
+				break; // Breaks the for each loop if the page is Philosophy
 			}
 			else if(i.contains("FAILED"))
-				break;
+				break; // Breaks from the for each loop if the Wiki fails to load
 
 		}
-
+		
 		input.close();
 	}
 
 }
 
+/**
+ * 
+ * @author Erik U
+ * @author Nick S
+ *
+ */
 class DoubleFunction implements Function<Integer, Integer> {
 
 	@Override
@@ -80,6 +88,13 @@ class DoubleFunction implements Function<Integer, Integer> {
 
 }
 
+/**
+ * Class that has one 
+ * 
+ * @author Erik U
+ * @author Nick S
+ *
+ */
 class AddExclamationFunction implements Function<String, String> {
 
 	@Override

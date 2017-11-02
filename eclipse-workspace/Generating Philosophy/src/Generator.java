@@ -3,11 +3,10 @@ import java.util.function.Function;
 
 public class Generator<Type> implements Iterable<Type>, Iterator<Type>, Function<Type,Type>{
 	
-	private Type current;
-	private int numberOfEvens;
-	private int count;
-	private Function<Type, Type> func;
-	
+	private Type current;		//Current node
+	private int numberOfEvens;	//Variable to be used in hasNext() method to make sure that no iteration past the number of evens desired occurs
+	private int count;			//Variable to be used in hasNext() method to make sure that no iteration past the number of evens desired occurs
+	private Function<Type, Type> func; //Function to be passed in that decides what to do to the numbers
 	
 	/**
 	 * Initializes a new EvenNumberGenerator to return a single even number
@@ -58,8 +57,5 @@ public class Generator<Type> implements Iterable<Type>, Iterator<Type>, Function
 		// TODO Auto-generated method stub
 		return func.apply(t);
 	}
-
-
-
 	
 }

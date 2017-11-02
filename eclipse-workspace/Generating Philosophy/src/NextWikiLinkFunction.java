@@ -4,7 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
  
-public class NetWikiLinkFunction implements Function<String,String> {
+public class NextWikiLinkFunction implements Function<String,String> {
     @Override
     public String apply(String t) {
         try {

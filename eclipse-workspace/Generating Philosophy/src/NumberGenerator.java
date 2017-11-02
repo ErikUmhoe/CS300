@@ -1,8 +1,14 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
-
-//This class creates an iterable object that can be iterated upon to increase the number in a way defined by a user passed in function
+/**
+ * This class creates an iterable object that can be iterated upon to increase the number in a way defined
+ * by a user passed in function
+ * @author Erik U
+ * @author Nick S
+ *
+ */
 public class NumberGenerator implements Iterable<Integer>, Iterator<Integer>, Function<Integer,Integer>{
 	
 	private Integer current;	//Current node 
@@ -51,6 +57,7 @@ public class NumberGenerator implements Iterable<Integer>, Iterator<Integer>, Fu
 	//Returns the next node with the function applied to the previous node.
 	@Override
 	public Integer next() {
+		if(!hasNext())	throw new NoSuchElementException();
 		Integer item = current;
 		current = apply(current);
 		count++;
