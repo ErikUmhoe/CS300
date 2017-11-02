@@ -34,45 +34,56 @@ import java.util.function.Function;
 //
 //
 /////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
+
+/**
+ * Main method to generate the wiki links.
+ * 
+ * @author Erik U
+ * @author Nick S
+ *
+ */
 public class Main {
 
 	/**
 	 * Main method to get a user to enter in a Wikipedia page then this checks
-	 * the entered page if it leads to the Wikipedia page Philosophy
+	 * the entered page if it leads to the Wikipedia page Philosophy.
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
-		String wikiChoice;
-		Scanner input = new Scanner(System.in);
-		
+		String wikiChoice;	// User's entered in wikipedia article.
+		Scanner input = new Scanner(System.in);	// Scanner to get user input.
+
 		System.out.print("Please enter a Wikipedia topic: " );
 		wikiChoice = input.nextLine();
-		wikiChoice = wikiChoice.replaceAll(" ", "_"); // Replaces all spaces with "_"
+		wikiChoice = wikiChoice.replaceAll(" ", "_"); // Replaces all spaces with "_".
 		wikiChoice = wikiChoice.trim();
 
 		int count = 0;
+
 		// For each loop to go through a generated list Wikipedia pages until it 
-		// fails or reaches Philosophy
+		// fails or reaches Philosophy.
 		for(String i : new Generator<String>(100,"/wiki/"+wikiChoice,new NextWikiLinkFunction()))
 		{
 			System.out.println(count +": " + i);
 			count++;
 			if(i.indexOf("Philosophy") > 0)
 			{	
-				break; // Breaks the for each loop if the page is Philosophy
+				break; // Breaks the for each loop if the page is Philosophy.
 			}
 			else if(i.contains("FAILED"))
-				break; // Breaks from the for each loop if the Wiki fails to load
+				break; // Breaks from the for each loop if the Wiki fails to load.
 
 		}
-		
+
 		input.close();
 	}
 
 }
 
 /**
+ * Class used to double a function.
  * 
  * @author Erik U
  * @author Nick S
@@ -80,7 +91,11 @@ public class Main {
  */
 class DoubleFunction implements Function<Integer, Integer> {
 
-	@Override
+	/**
+	 * Constructor that sets up the object and returns doubled value.
+	 * 
+	 * @Override
+	 */
 	public Integer apply(Integer t) {
 
 		return t * 2;
@@ -89,7 +104,7 @@ class DoubleFunction implements Function<Integer, Integer> {
 }
 
 /**
- * Class that has one 
+ * Class that adds an exclamation point to a string.
  * 
  * @author Erik U
  * @author Nick S
@@ -97,7 +112,11 @@ class DoubleFunction implements Function<Integer, Integer> {
  */
 class AddExclamationFunction implements Function<String, String> {
 
-	@Override
+	/**
+	 * Constructor that sets up the object and returns the string with an exclamation point.
+	 * 
+	 * @Override
+	 */
 	public String apply(String t) {
 		return t += "!";
 	}

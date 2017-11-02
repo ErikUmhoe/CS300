@@ -1,12 +1,17 @@
 import java.util.Iterator;
 
 public class EvenNumberGenerator implements Iterable<Integer>, Iterator<Integer>{
-	
+
+	// Current node.
 	private Integer current;
+
+	// Number of even objects desired to be printed / created.
 	private int numberOfEvens;
+
+	// Variable to be used in hasNext() method to make sure that no iteration past
+	// the number of evens desired occurs.
 	private int count;
-	
-	
+
 	/**
 	 * Initializes a new EvenNumberGenerator to return a single even number
 	 * each time it's next() method is called.  The first even number returned
@@ -24,31 +29,44 @@ public class EvenNumberGenerator implements Iterable<Integer>, Iterator<Integer>
 	 *                                    when firstEven is not an even number
 	 */
 	public EvenNumberGenerator(int numberOfEvens, Integer firstEven) throws IllegalArgumentException {
-	   current = firstEven;
-	   if(current % 2 != 0 || current < 0)
-		   throw new IllegalArgumentException();
-	   this.numberOfEvens = numberOfEvens;
-	   count = 0;
-	   
+		current = firstEven;
+		// Checks if the number is even and is a positive integer.
+		if(current % 2 != 0 || current < 0)
+			throw new IllegalArgumentException();
+		this.numberOfEvens = numberOfEvens;
+		count = 0;
+
 	}
 
-	@Override
+	/**
+	 * Allows for iteration through generator.
+	 * 
+	 * @Override
+	 */
 	public Iterator<Integer> iterator() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 
-	@Override
+	/**
+	 * Returns whether iteration can continue or not.
+	 * 
+	 * @Override
+	 */
 	public boolean hasNext() {
-		
+
 		return count < numberOfEvens;
 	}
 
-	@Override
+	/**
+	 * Returns the next even Integer.
+	 * 
+	 * @Override
+	 */
 	public Integer next() {
 		Integer item = current;
 		current = current+2;
 		count++;
 		return item;
 	}
+
 }
