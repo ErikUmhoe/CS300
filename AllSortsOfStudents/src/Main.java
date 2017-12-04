@@ -6,7 +6,29 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
-		Object[][] objs = readFile("test02.txt");
+
+		
+		Object[][] objs = readFile("C:\\Users\\Erik\\eclipse-workspace\\AllSortsOfStudents\\src\\test02.txt");
+		objs = sortInsertion(objs, 0);
+		
+		Object[][] objs2 = readFile("C:\\Users\\Erik\\eclipse-workspace\\AllSortsOfStudents\\src\\test02.txt");
+		objs2 = sortInsertion(objs2, 1);
+		
+		System.out.println();
+		
+		for(int i = 0; i < objs.length; i++)
+		{
+			for(int j = 0; j < objs[i].length; j++)
+				System.out.print(objs[i][j] + " ");
+			System.out.println();
+		}
+		System.out.println();
+		for(int i = 0; i < objs2.length; i++)
+		{
+			for(int j = 0; j < objs2[i].length; j++)
+				System.out.print(objs2[i][j] + " ");
+			System.out.println();
+		}
 	}
 
 	public static Object[][] readFile(String path) {
@@ -65,5 +87,41 @@ public class Main {
 			return null;
 		}
 		
+	}
+	
+	public static Object[][] sortInsertion(Object[][] values, int key)
+	{
+			Object[] temp;
+			for(int i = 1; i < values.length; i++)
+			{
+				for(int j = i; j > 0; j--)
+				{
+					//Compare by names alphabetically, works.
+					if(key == 0)
+					{
+						if(values[j][key].toString().compareTo(values[j-1][key].toString()) < 0)
+						{
+							temp = values[j];
+							values[j] = values[j-1];
+							values[j-1] = temp;
+							
+							
+						}
+					}
+					
+					//If key is not 0, compare by the integer values.... doesn't work
+					else
+					{
+						if(Integer.parseInt(values[j][key].toString()) > (Integer.parseInt((values[j-1][key].toString()))))
+						{
+							temp = values[j];
+							values[j] = values[j-1];
+							values[j-1] = temp;							
+						}
+					}
+				}
+			
+			}
+			return values;
 	}
 }
