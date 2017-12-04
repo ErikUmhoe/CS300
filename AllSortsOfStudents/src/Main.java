@@ -9,10 +9,7 @@ public class Main {
 
 		
 		Object[][] objs = readFile("C:\\Users\\Erik\\eclipse-workspace\\AllSortsOfStudents\\src\\test02.txt");
-		objs = sortInsertion(objs, 0);
-		
-		Object[][] objs2 = readFile("C:\\Users\\Erik\\eclipse-workspace\\AllSortsOfStudents\\src\\test02.txt");
-		objs2 = sortInsertion(objs2, 1);
+		objs = selectionSort(objs, 0);
 		
 		System.out.println();
 		
@@ -23,12 +20,7 @@ public class Main {
 			System.out.println();
 		}
 		System.out.println();
-		for(int i = 0; i < objs2.length; i++)
-		{
-			for(int j = 0; j < objs2[i].length; j++)
-				System.out.print(objs2[i][j] + " ");
-			System.out.println();
-		}
+				
 	}
 
 	public static Object[][] readFile(String path) {
@@ -123,5 +115,28 @@ public class Main {
 			
 			}
 			return values;
+	}
+	
+	//Selection sort, so far only alphabetically works.
+	public static Object[][] selectionSort(Object[][] values, int key)
+	{
+		if(key == 0)
+		{
+			for(int i = 0; i < values.length; i++)
+			{
+				int minIndex = i;
+				for(int j = i+1; j < values.length; j++)
+				{
+					if(values[j][key].toString().compareTo(values[minIndex][key].toString()) < 0)
+					{
+						minIndex = j;
+					}
+				}
+				Object[] temp = values[minIndex];
+				values[minIndex] = values[i];
+				values[i] = temp;
+			}
+		}
+		return values;
 	}
 }
