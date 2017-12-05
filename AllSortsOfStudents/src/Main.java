@@ -7,19 +7,41 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		Scanner in = new Scanner(System.in);
+		String userIn;
 		
-		Object[][] objs = readFile("C:\\Users\\Erik\\eclipse-workspace\\AllSortsOfStudents\\src\\test02.txt");
+		System.out.print("Enter the name of your student data file: ");
+		Object[][] objs = readFile(in.nextLine());
 		objs = selectionSort(objs, 0);
-		
-		System.out.println();
-		
-		for(int i = 0; i < objs.length; i++)
+		do
 		{
-			for(int j = 0; j < objs[i].length; j++)
-				System.out.print(objs[i][j] + " ");
-			System.out.println();
-		}
-		System.out.println();
+			printScores(objs);
+			System.out.print("> ");
+			userIn = in.nextLine().trim();
+			System.out.println(objs[0][0]);
+			if(userIn.substring(0,1).equalsIgnoreCase("q")) {} // User wants to Quit
+			
+			else if(userIn.substring(0,1).equalsIgnoreCase("o")) // User wants Optimal Time
+			{
+				//Heap sort
+			}
+			
+			else if(userIn.substring(0,1).equalsIgnoreCase("a")) // User wants Adaptive
+			{
+				sortInsertion(objs,Integer.parseInt(userIn.substring(1)));
+			}
+			
+			else if(userIn.substring(0,1).equalsIgnoreCase("f")) // User wants Fewest Swaps
+			{
+				selectionSort(objs,Integer.parseInt(userIn.substring(1)));
+			}
+			
+			else // Unknown command
+				System.out.println("Unknown Command");
+			
+		} while (!userIn.substring(0,1).equalsIgnoreCase("q"));
+		
+		in.close();
 				
 	}
 
@@ -39,44 +61,38 @@ public class Main {
 			}
 			
 			//Creates a 2D array of size number of lines x number of values in a line
-			values = new Object[lines.size()][lines.get(0).split(",").length];
+			values = new Object[lines.size()][lines.get(0).split(",").length+1];
 			
 			//Parses through each line, assigning it into the 2D Array
 			//First element of row of 2D array is the name in string, all other values in that row 
 			//are an integer value of the score
 			for(int i = 0; i < values.length; i++)
 			{
-				for(int j = 0; j < values[i].length; j++)
+				// Splits each line by semicolon
+				String[] line = lines.get(i).split(":");
+				
+				// Puts name of student into values
+				values[i][0] = line[0].trim();
+				
+				// Splits each score by comma
+				line = line[1].split(",");
+				for(int j = 1; j < values[i].length; j++)
 				{
-					//Splits each line by comma
-					String[] line = lines.get(i).split(",");
-					values[i][j] = line[j];
-					
-					//Trims off any excess whitespace
-					values[i][j] = values[i][j].toString().trim();
-					
-					//Changes values of test scores from string into integer
-					if(j > 0)
-					{
-						values[i][j] = String.valueOf(values[i][j]);
-					}
+					// Converts scores to int and put in values
+					values[i][j] = Integer.parseInt(line[j-1].trim());
 				}
 			}
-			for(int i = 0; i < values.length; i++)
-			{
-				for(int j = 0; j < values[i].length; j++)
-					System.out.print(values[i][j] + " ");
-				System.out.println();
-			}
 			return values;
-			
-			
-			
-			
 		}catch(FileNotFoundException e) //if no file is found with the specified path
 		{
 			System.out.println("No file of the path \"" + path + "\" was found. Please provide a correct filepath.");
 			return null;
+		} finally
+		{
+			if(fileReader != null)
+			{
+				fileReader.close();
+			}
 		}
 		
 	}
@@ -96,15 +112,13 @@ public class Main {
 							temp = values[j];
 							values[j] = values[j-1];
 							values[j-1] = temp;
-							
-							
 						}
 					}
 					
-					//If key is not 0, compare by the integer values.... doesn't work
+					//If key is not 0, compare by the integer values
 					else
 					{
-						if(Integer.parseInt(values[j][key].toString()) > (Integer.parseInt((values[j-1][key].toString()))))
+						if(Integer.parseInt(values[j][key].toString()) < (Integer.parseInt((values[j-1][key].toString()))))
 						{
 							temp = values[j];
 							values[j] = values[j-1];
@@ -112,7 +126,7 @@ public class Main {
 						}
 					}
 				}
-			
+				System.out.println("Row: " + i);
 			}
 			return values;
 	}
@@ -138,5 +152,16 @@ public class Main {
 			}
 		}
 		return values;
+	}
+	
+	public static void printScores(Object[][] objs)
+	{
+		for(int i = 0; i < objs.length; i++)
+		{
+			System.out.print(objs[i][0] + ":\t");
+			for(int j = 1; j < objs[i].length-1; j++)
+				System.out.print(objs[i][j] + ", ");
+			System.out.println(objs[i][objs[i].length-1]);
+		}
 	}
 }
