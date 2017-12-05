@@ -12,7 +12,7 @@ public class Main {
 		
 		System.out.print("Enter the name of your student data file: ");
 		Object[][] objs = readFile(in.nextLine());
-		objs = selectionSort(objs, 0);
+		selectionSort(objs, 0);
 		do
 		{
 			printScores(objs);
@@ -22,17 +22,17 @@ public class Main {
 			
 			else if(userIn.substring(0,1).equalsIgnoreCase("o")) // User wants Optimal Time
 			{
-				//Heap sort
+				heapSort(objs, Integer.parseInt(userIn.substring(1).trim()));
 			}
 			
 			else if(userIn.substring(0,1).equalsIgnoreCase("a")) // User wants Adaptive
 			{
-				sortInsertion(objs,Integer.parseInt(userIn.substring(1).trim()));
+				sortInsertion(objs, Integer.parseInt(userIn.substring(1).trim()));
 			}
 			
 			else if(userIn.substring(0,1).equalsIgnoreCase("f")) // User wants Fewest Swaps
 			{
-				selectionSort(objs,Integer.parseInt(userIn.substring(1).trim()));
+				selectionSort(objs, Integer.parseInt(userIn.substring(1).trim()));
 			}
 			
 			else // Unknown command
@@ -96,10 +96,9 @@ public class Main {
 		
 	}
 	
-	public static Object[][] sortInsertion(Object[][] values, int key)
+	public static void sortInsertion(Object[][] values, int key)
 	{
 		boolean swap = false;
-		Object[] temp;
 		for(int i = 1; i < values.length; i++)
 		{
 			for(int j = i; j > 0; j--)
@@ -115,18 +114,15 @@ public class Main {
 				// If swap is true, swap values
 				if(swap)
 				{
-					temp = values[j];
-					values[j] = values[j-1];
-					values[j-1] = temp;
+					swap(values, i, j-1);
 					swap = false;
 				}
 			}
 		}
-		return values;
 	}
 	
 	//Selection sort, so far only alphabetically works.
-	public static Object[][] selectionSort(Object[][] values, int key)
+	public static void selectionSort(Object[][] values, int key)
 	{
 		boolean swap = false;
 		//if(key == 0)
@@ -139,18 +135,72 @@ public class Main {
 					if(key == 0 && values[j][key].toString().compareTo(values[minIndex][key].toString()) < 0)
 						minIndex = j;
 					else if(key > 0 && Integer.parseInt(values[j][key].toString()) 
-							< (Integer.parseInt(values[minIndex][key].toString())))
+							< Integer.parseInt(values[minIndex][key].toString()))
 						minIndex = j;
 				}
-				Object[] temp = values[minIndex];
-				values[minIndex] = values[i];
-				values[i] = temp;
+				swap(values, i, minIndex);
 			}
 		//}
-		return values;
 	}
 	
-	// Prints the Students and scores
+	// Heap Sort
+	public static void heapSort(Object[][] values, int key)
+	{
+		for(int i = (values.length-1)/2; i >= 0; i--)
+			heapify(values, i, values.length-1, key);
+		System.out.println("Built Heap");
+		int sizeOfHeap = values.length-1;
+		for(int i = sizeOfHeap; i>0; i--)
+		{
+			swap(values, 0, i);
+			sizeOfHeap--;
+			heapify(values, 0, sizeOfHeap, key);
+		}
+	}
+	
+	//Build Heap
+	public static void heapify(Object[][] values, int i, int size,  int key)
+	{
+		int left = 2*i+1;
+	    int right = 2*i+2;
+	    int max;
+	    if(key == 0)
+	    {
+	    	if(left < size && values[left][key].toString().compareTo(values[i][key].toString()) > 0)
+	    		max = left;
+	    	else 
+	    		max = i;
+	    	if(right < size && values[right][key].toString().compareTo(values[max][key].toString()) > 0)
+	    		max = right;
+	    }
+	    else
+	    {
+	    	if(left < size && Integer.parseInt(values[left][key].toString()) 
+					> Integer.parseInt(values[i][key].toString()))
+	    		max = left;
+	    	else 
+	    		max = i;
+	    	if(right < size && Integer.parseInt(values[right][key].toString()) 
+					> Integer.parseInt(values[max][key].toString()))
+	    		max = right;
+	    }
+	    // If max is not current node, exchange it with max of left and right child
+	    if(max!=i) {
+	    	//System.out.println("Max: "+values[max][key]+ "Swapping with i: "+ values[i][key]+" key: "+key);
+	    	swap(values, i, max);
+	    	heapify(values, max, size,  key);
+	    }
+	}
+	
+	//Swap values
+	public static void swap(Object[][] values, int i, int j)
+	{
+		Object[] temp = values[j];
+		values[j] = values[i];
+		values[i] = temp;
+	}
+	
+	// Prints the students and scores
 	public static void printScores(Object[][] objs)
 	{
 		for(int i = 0; i < objs.length; i++)
