@@ -18,7 +18,6 @@ public class Main {
 			printScores(objs);
 			System.out.print("> ");
 			userIn = in.nextLine().trim();
-			System.out.println(objs[0][0]);
 			if(userIn.substring(0,1).equalsIgnoreCase("q")) {} // User wants to Quit
 			
 			else if(userIn.substring(0,1).equalsIgnoreCase("o")) // User wants Optimal Time
@@ -28,12 +27,12 @@ public class Main {
 			
 			else if(userIn.substring(0,1).equalsIgnoreCase("a")) // User wants Adaptive
 			{
-				sortInsertion(objs,Integer.parseInt(userIn.substring(1)));
+				sortInsertion(objs,Integer.parseInt(userIn.substring(1).trim()));
 			}
 			
 			else if(userIn.substring(0,1).equalsIgnoreCase("f")) // User wants Fewest Swaps
 			{
-				selectionSort(objs,Integer.parseInt(userIn.substring(1)));
+				selectionSort(objs,Integer.parseInt(userIn.substring(1).trim()));
 			}
 			
 			else // Unknown command
@@ -99,61 +98,59 @@ public class Main {
 	
 	public static Object[][] sortInsertion(Object[][] values, int key)
 	{
-			Object[] temp;
-			for(int i = 1; i < values.length; i++)
-			{
-				for(int j = i; j > 0; j--)
-				{
-					//Compare by names alphabetically, works.
-					if(key == 0)
-					{
-						if(values[j][key].toString().compareTo(values[j-1][key].toString()) < 0)
-						{
-							temp = values[j];
-							values[j] = values[j-1];
-							values[j-1] = temp;
-						}
-					}
-					
-					//If key is not 0, compare by the integer values
-					else
-					{
-						if(Integer.parseInt(values[j][key].toString()) < (Integer.parseInt((values[j-1][key].toString()))))
-						{
-							temp = values[j];
-							values[j] = values[j-1];
-							values[j-1] = temp;							
-						}
-					}
-				}
-				System.out.println("Row: " + i);
-			}
-			return values;
-	}
-	
-	//Selection sort, so far only alphabetically works.
-	public static Object[][] selectionSort(Object[][] values, int key)
-	{
-		if(key == 0)
+		boolean swap = false;
+		Object[] temp;
+		for(int i = 1; i < values.length; i++)
 		{
-			for(int i = 0; i < values.length; i++)
+			for(int j = i; j > 0; j--)
 			{
-				int minIndex = i;
-				for(int j = i+1; j < values.length; j++)
+				// Compare by names alphabetically
+				if(key == 0 && values[j][key].toString().compareTo(values[j-1][key].toString()) < 0)
+					swap = true;
+
+				// If key is not 0, compare by the integer values
+				else if( key > 0 && Integer.parseInt(values[j][key].toString()) 
+						< (Integer.parseInt(values[j-1][key].toString())))
+					swap = true;							
+				// If swap is true, swap values
+				if(swap)
 				{
-					if(values[j][key].toString().compareTo(values[minIndex][key].toString()) < 0)
-					{
-						minIndex = j;
-					}
+					temp = values[j];
+					values[j] = values[j-1];
+					values[j-1] = temp;
+					swap = false;
 				}
-				Object[] temp = values[minIndex];
-				values[minIndex] = values[i];
-				values[i] = temp;
 			}
 		}
 		return values;
 	}
 	
+	//Selection sort, so far only alphabetically works.
+	public static Object[][] selectionSort(Object[][] values, int key)
+	{
+		boolean swap = false;
+		//if(key == 0)
+		//{
+			for(int i = 0; i < values.length; i++)
+			{
+				int minIndex = i;
+				for(int j = i+1; j < values.length; j++)
+				{
+					if(key == 0 && values[j][key].toString().compareTo(values[minIndex][key].toString()) < 0)
+						minIndex = j;
+					else if(key > 0 && Integer.parseInt(values[j][key].toString()) 
+							< (Integer.parseInt(values[minIndex][key].toString())))
+						minIndex = j;
+				}
+				Object[] temp = values[minIndex];
+				values[minIndex] = values[i];
+				values[i] = temp;
+			}
+		//}
+		return values;
+	}
+	
+	// Prints the Students and scores
 	public static void printScores(Object[][] objs)
 	{
 		for(int i = 0; i < objs.length; i++)
