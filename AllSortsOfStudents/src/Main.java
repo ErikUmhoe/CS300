@@ -101,7 +101,7 @@ public class Main {
 		in.close();
 
 	}
-	
+
 	/**
 	 * Reads the file the user designates and enters it into a 2D Object array.
 	 * 
@@ -187,7 +187,7 @@ public class Main {
 				else if( key > 0 && Integer.parseInt(values[j][key].toString()) 
 						< (Integer.parseInt(values[j-1][key].toString())))
 					swap = true;	
-				
+
 				// If swap is true, swap values.
 				if(swap)
 				{
@@ -216,7 +216,7 @@ public class Main {
 				// Compares student names alphabetically.
 				if(key == 0 && values[j][key].toString().compareTo(values[minIndex][key].toString()) < 0)
 					minIndex = j;
-				
+
 				// Compares student scores at key index to find, and sets minIndex to smallest value.
 				else if(key > 0 && Integer.parseInt(values[j][key].toString()) 
 						< Integer.parseInt(values[minIndex][key].toString()))
@@ -236,18 +236,18 @@ public class Main {
 	public static void heapSort(Object[][] values, int key)
 	{
 		int sizeOfHeap = values.length-1;
-		
+
 		// Builds the heap.
 		for(int i=(sizeOfHeap)/2; i >= 0; i--)
 			heapify(values, i, sizeOfHeap, key);
-		
+
 		// Puts largest heap value at end of loop.
 		for(int i=sizeOfHeap; i>0; i--)
 		{
 			swap(values, 0, i);
-			
+
 			sizeOfHeap--;
-			
+
 			// Re-heapifies the edited heap.
 			heapify(values, 0, sizeOfHeap, key);
 		}
